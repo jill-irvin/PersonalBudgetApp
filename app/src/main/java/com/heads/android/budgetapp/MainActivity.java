@@ -47,8 +47,12 @@ public class MainActivity extends AppCompatActivity  {
     //find this using the tags and second radio group - dynamic radio group; don't use on click listener
     protected String subExpenseType = null;
 
-   // protected RadioGroup dynamicRadioGroup;fds
-    protected LinearLayout dynamicRadioLayout;
+   // protected RadioGroup dynamicRadioGroup
+    private LinearLayout dynamicRadioLayout;
+
+    private RadioGroup groupExpenseTypes;
+
+    private TextView totalView;
 //adding some comments here
 
     //global arraylists of strings for expense type sub-types
@@ -70,6 +74,12 @@ public class MainActivity extends AppCompatActivity  {
 
         //this is the radio group that changes based on the expense type selected
         this.dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
+
+        //this radio group is for the main expenses
+        this.groupExpenseTypes = (RadioGroup) findViewById(R.id.groupExpenseType);
+
+        //create the textview that shows the total amount
+        this.totalView = (TextView) findViewById(R.id.textAmount);
 
         //no longer need to instantiate radio button expense types for on click listeners
         //no longer need to instantiate $ buttons for on click listeners
@@ -188,10 +198,6 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
 
-                //update all radio buttons in the radio group to be inactive!
-                //grab the radio group associated with budget
-                RadioGroup groupExpenseTypes = (RadioGroup) findViewById(R.id.groupExpenseType);
-
                 //get the current condition of the checkbox
                 //if deselected then gray-out the expenses option area
                 if (!checkBudget.isChecked()) {
@@ -247,7 +253,7 @@ public class MainActivity extends AppCompatActivity  {
     //method used to update the amount displayed on the textview
     public void updateTotalDisplay(View v){
         //the UI view to update
-        TextView totalView = (TextView) findViewById(R.id.textAmount);
+        //TextView totalView = (TextView) findViewById(R.id.textAmount);
 
         //get the amount clicked
         int selectedAmount = BudgetAppUtils.extractAmount(v);
@@ -255,12 +261,12 @@ public class MainActivity extends AppCompatActivity  {
         //if the value returned is 0 then clear the budgetTotal
         if(selectedAmount == 0){
             budgetTotal = 0;
-            totalView.setText("");
+            this.totalView.setText("");
         }
         else {
             //update the budgetTotal with selected value
             budgetTotal = budgetTotal + selectedAmount;
-            totalView.setText(String.valueOf(this.budgetTotal));
+            this.totalView.setText(String.valueOf(this.budgetTotal));
         }
     } //end updateTotalDisplay
 
@@ -314,12 +320,35 @@ public class MainActivity extends AppCompatActivity  {
             Toast toast = Toast.makeText(getApplicationContext(),
                     "Data sent!",
                     Toast.LENGTH_SHORT);
-
             toast.show();
 
+            //clear UI
+            clearUI();
             // Update the information displayed to the user.
             //updateUi(earthquake);
         }
+    }
+
+    /**
+     * This method is called after a successful post of data.
+     * It clears the global variables of data as well as any radio selections
+     */
+    private void clearUI(){
+
+        //clear the expense and subexpense type global
+        this.expenseType = null;
+        this.subExpenseType = null;
+
+        //clear the totals
+        this.budgetTotal = 0;
+
+        this.totalView.setText("");
+
+        //update the subexpenses dynamic group radios to be deleted
+        removeRadioGroup();
+
+        //clear any selection of a radio button
+        groupExpenseTypes.clearCheck();
     }
 
     /**

@@ -90,7 +90,6 @@ public class BudgetAppUtils {
             radioGroupLayout.removeViewAt(index);
             //dynamicRadioLayout.removeAllViews();
         }
-
     }
 
     /**
@@ -175,7 +174,7 @@ public class BudgetAppUtils {
                 Log.e("make: ", "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e("make: ", "Problem retrieving the earthquake JSON results.", e);
+            Log.e("make: ", "Problem with post data.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
