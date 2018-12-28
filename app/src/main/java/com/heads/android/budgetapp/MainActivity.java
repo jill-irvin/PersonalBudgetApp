@@ -215,69 +215,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        //instantiate button objects from views
-        Button buttonOnes = (Button) findViewById(R.id.buttonOnes);
-        Button buttonFives = (Button) findViewById(R.id.buttonFives);
-        Button buttonTens = (Button) findViewById(R.id.buttonTens);
-        Button buttonTwenties = (Button) findViewById(R.id.buttonTwenties);
-        Button buttonFifties = (Button) findViewById(R.id.buttonFifties);
-        Button buttonClear = (Button) findViewById(R.id.buttonClear);
 
-        //set onclicklisteners for each money amount and clear buttons
-        buttonClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //update the total to be 0 and update display
-                budgetTotal = 0;
-                updateTotalDisplay();
-            }
-        });
-        //set onclicklisteners for each button
-        buttonOnes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //call addAmount method helper with data from this view
-                //addAmount(view);
-                budgetTotal = budgetTotal + BudgetAppUtils.extractAmount(view);
-                updateTotalDisplay();
-            }
-        });
-        buttonFives.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //call addAmount method helper with data from this view
-                //addAmount(view);
-                budgetTotal = budgetTotal + BudgetAppUtils.extractAmount(view);
-                updateTotalDisplay();
-            }
-        });
-        buttonTens.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //call addAmount method helper with data from this view
-                //addAmount(view);
-                budgetTotal = budgetTotal + BudgetAppUtils.extractAmount(view);
-                updateTotalDisplay();
-            }
-        });
-        buttonTwenties.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //call addAmount method helper with data from this view
-                //addAmount(view);
-                budgetTotal = budgetTotal + BudgetAppUtils.extractAmount(view);
-                updateTotalDisplay();
-            }
-        });
-        buttonFifties.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //call addAmount method helper with data from this view
-                //addAmount(view);
-                budgetTotal = budgetTotal + BudgetAppUtils.extractAmount(view);
-                updateTotalDisplay();
-            }
-        });
     } //end onCreate
 
     /*method used to add amount based on button view's text
@@ -296,32 +234,30 @@ public class MainActivity extends AppCompatActivity  {
     }
     */
 
+    /**
+     * This method is called by any of the $ and X buttons in order to update the total amount entered.
+     * This method is used instead of instantiating all the buttons in the onCreate method and setting
+     * up the associated onClick listeners
+     */
     //method used to update the amount displayed on the textview
-    public void updateTotalDisplay(){
+    public void updateTotalDisplay(View v){
+        //the UI view to update
         TextView totalView = (TextView) findViewById(R.id.textAmount);
 
-        //if total is 0 then make the textview blank for easy manual input
-        if(this.budgetTotal == 0){
+        //get the amount clicked
+        int selectedAmount = BudgetAppUtils.extractAmount(v);
+
+        //if the value returned is 0 then clear the budgetTotal
+        if(selectedAmount == 0){
+            budgetTotal = 0;
             totalView.setText("");
         }
         else {
+            //update the budgetTotal with selected value
+            budgetTotal = budgetTotal + selectedAmount;
             totalView.setText(String.valueOf(this.budgetTotal));
         }
-    }
-
-
-    //method to remove sub radios from dynamic radio group
-    private void removeRadioGroup(){
-        if(this.dynamicRadioLayout.getChildCount() > 1) {
-            //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
-            //  Log.i("deleted child:", "dynamic group");
-            dynamicRadioLayout.removeViewAt(1);
-            //dynamicRadioLayout.removeAllViews();
-        }
-
-    }
-
-
+    } //end updateTotalDisplay
 
 
     /**
@@ -480,6 +416,17 @@ public class MainActivity extends AppCompatActivity  {
         //return the filled-in radio group to the caller
         return temp;
     } //end createRadioGroup
+
+
+    //method to remove sub radios from dynamic radio group
+    private void removeRadioGroup(){
+        if(this.dynamicRadioLayout.getChildCount() > 1) {
+            //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
+            //  Log.i("deleted child:", "dynamic group");
+            dynamicRadioLayout.removeViewAt(1);
+            //dynamicRadioLayout.removeAllViews();
+        }
+    } //end removeRadioGroup
 
 
 }

@@ -35,12 +35,18 @@ public class BudgetAppUtils {
 
     //method to get the int value of a money button
     public static int extractAmount(View v){
+        int amount;
         //get the view selected
         Button clickedButton = (Button)v;
 
-        //grab only the string w/o $
-        int amount = Integer.valueOf(clickedButton.getText().toString().substring(1));
-
+        //try catch- if no integer then reset the amount
+        try {
+            //grab only the string w/o $
+            amount = Integer.valueOf(clickedButton.getText().toString().substring(1));
+        }
+        catch(NumberFormatException e){
+            amount = 0;
+        }
         return amount;
     }
 
