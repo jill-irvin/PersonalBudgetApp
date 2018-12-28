@@ -36,13 +36,13 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity  {
 
     //global variable for how much to enter into budget/credit
-    protected static int budgetTotal = 0;
+    protected int budgetTotal = 0;
     private int creditTotal = 0;
 
     //keep track of what's selected
-    protected static boolean isBudget = true;
+    protected boolean isBudget = true;
     protected boolean isCredit = false;
-    protected static String expenseType = null;
+    protected String expenseType = null;
 
     //find this using the tags and second radio group - dynamic radio group; don't use on click listener
     protected String subExpenseType = null;
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
                     //check the selections are good
-                    String checkBudgetSelectionsResult = BudgetAppUtils.checkBudgetSelections(dynamicRadioLayout);
+                    String checkBudgetSelectionsResult = BudgetAppUtils.checkBudgetSelections(budgetTotal, expenseType, dynamicRadioLayout);
 
                     if(checkBudgetSelectionsResult != null){
                         //update the toast message with returned string

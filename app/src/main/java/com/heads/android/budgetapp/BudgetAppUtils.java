@@ -39,13 +39,13 @@ public class BudgetAppUtils {
      * @param dynamicRadioLayout - make sure that one has been selected
      * @return result - to either update the toast message or proceed with data input (null means proceed)
      */
-    public static String checkBudgetSelections(LinearLayout dynamicRadioLayout){
+    public static String checkBudgetSelections(int amount, String expenseType, LinearLayout dynamicRadioLayout){
         String result = null;
 
         //check protected variables from MainActivity as well as the passed in argument
-        if(MainActivity.budgetTotal == 0)
+        if(amount == 0)
             result = "Enter an amount.";
-        else if(MainActivity.expenseType == null)
+        else if(expenseType == null)
             result = "You need to select an expense type";
        // else if(subExpenseTypeSelected == 1)
             //result =  "You need to select a sub expense";
