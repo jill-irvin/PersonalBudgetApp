@@ -69,13 +69,7 @@ public class MainActivity extends AppCompatActivity  {
         //this.dynamicRadioGroup = (RadioGroup) findViewById(R.id.dynamicRadioGroup);
         this.dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
 
-        //instantiate radio button expense types
-        final RadioButton radioEntertainment = (RadioButton) findViewById(R.id.radioEntertainment);
-        final RadioButton radioDailyLiving = (RadioButton) findViewById(R.id.radioDailyLiving);
-        final RadioButton radioPersonal = (RadioButton) findViewById(R.id.radioPersonal);
-        final RadioButton radioHealth = (RadioButton) findViewById(R.id.radioHealth);
-        final RadioButton radioCar = (RadioButton) findViewById(R.id.radioCar);
-        final RadioButton radioHouse = (RadioButton) findViewById(R.id.radioHouse);
+        //no longer need to instantiate radio button expense types for on click listeners
 
         //instantiate submit button
         final Button submit = (Button) findViewById(R.id.buttonSubmit);
@@ -164,111 +158,6 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         });
-
-
-        //instead of creating onclick listeners for each radio button, have xml call fn?
-        //create on click listeners for each button
-        radioEntertainment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //update the global variable of subexpense with selection
-                expenseType = radioEntertainment.getText().toString();
-                Log.i("creating new views for:", "entertainment");
-
-                //add a RadioGroup to the linear layout - method calls returns the group with populated radio buttons
-                dynamicRadioLayout.addView(createRadioGroup(ENTERTAINMENT_LIST));
-
-            }
-        });
-
-        radioDailyLiving.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //update the global variable of subexpense with selection
-                expenseType = radioDailyLiving.getText().toString();
-                Log.i("creating new views for:", "daily living");
-
-                //add a radio group to the linear layout
-                dynamicRadioLayout.addView(createRadioGroup(DAILY_LIVING_LIST));
-            }
-        });
-
-        radioPersonal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //update the global variable of subexpense with selection
-                expenseType = radioPersonal.getText().toString();
-
-                //call method to create addtional radio group with buttons
-                //createRadios(PERSONAL_LIST);
-                dynamicRadioLayout.addView(createRadioGroup(PERSONAL_LIST));
-            }
-        });
-
-        radioHealth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //update the global variable of subexpense with selection
-                expenseType = radioHealth.getText().toString();
-
-                //call method to create addtional radio group with buttons
-               // createRadios(HEALTH_LIST);
-                dynamicRadioLayout.addView(createRadioGroup(HEALTH_LIST));
-            }
-        });
-
-        radioCar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //update the global variable of subexpense with selection
-                expenseType = radioCar.getText().toString();
-
-                //call method to create addtional radio group with buttons
-            //    createRadios(CAR_LIST);
-                dynamicRadioLayout.addView(createRadioGroup(CAR_LIST));
-            }
-        });
-
-        radioHouse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //update the global variable of subexpense with selection
-                expenseType = radioHouse.getText().toString();
-
-                //call method to create addtional radio group with buttons
-                //createRadios(HOUSE_LIST);
-                dynamicRadioLayout.addView(createRadioGroup(HOUSE_LIST));
-            }
-        });
-
-
-        //set the onclick listener of each radio button to call the helper method to
-        //create additional radio buttons related to the expense type selected
-        /*
-        This doesn't work b/c of radio group clickable area
-        //if radio group selected - find out which child was selected
-        final RadioGroup groupExpenseTypes = (RadioGroup) findViewById(R.id.groupExpenseType);
-        groupExpenseTypes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("selected Radio Group:", "click in");
-
-                //see what child radio button selected
-                int selectedRadioID = groupExpenseTypes.getCheckedRadioButtonId();
-
-                //create object for the seleted chld
-                RadioButton selectedRadio = (RadioButton) groupExpenseTypes.getChildAt(selectedRadioID);
-
-                //update the global variable of subexpense with selection
-                expenseType = selectedRadio.getText().toString();
-
-                Log.i("selected Radio Group:", expenseType);
-
-                //call the method to create the next subtype radio group
-                //so the global stores the string selected...don't need to pass it in
-            }
-        });
-        */
 
         //instantiate checkboxes
         final CheckBox checkBudget = (CheckBox) findViewById(R.id.checkboxBudget);
