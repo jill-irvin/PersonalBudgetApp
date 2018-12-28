@@ -1,9 +1,12 @@
 package com.heads.android.budgetapp;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.icu.util.BuddhistCalendar;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -66,13 +69,16 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
         //this is the radio group that changes based on the expense type selected
-        //this.dynamicRadioGroup = (RadioGroup) findViewById(R.id.dynamicRadioGroup);
         this.dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
 
         //no longer need to instantiate radio button expense types for on click listeners
+        //no longer need to instantiate $ buttons for on click listeners
 
         //instantiate submit button
         final Button submit = (Button) findViewById(R.id.buttonSubmit);
+
+        //instantiate checkboxes
+        final CheckBox checkBudget = (CheckBox) findViewById(R.id.checkboxBudget);
 
        //final BudgetAsyncTask task = new BudgetAsyncTask();
         //task.execute(budgetURLString);
@@ -87,45 +93,66 @@ public class MainActivity extends AppCompatActivity  {
                 Log.i("submit pressed: " , "yes");
                 //Log.i("isBudget value: " , String.valueOf(isBudget));
 
-                //log based on if is budget is selected
-                if(isBudget) {
+                //first check that there is internet connection before submitting
+                //Get a reference to the ConnectivityManager to check state of network connectivity
+                ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                    //get the main expense type and store in int (-1) means nothing selected
-                    RadioGroup tempGroupExpenseTypes = (RadioGroup) findViewById(R.id.groupExpenseType);
-                    int mainExpenseTypeSelected = tempGroupExpenseTypes.getCheckedRadioButtonId();
-                    Log.i("main group selection", String.valueOf(mainExpenseTypeSelected));
+                // Get details on the currently active default data network
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-                    //get the second child of the dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
-                    RadioGroup tempsubExpenseGroup = (RadioGroup) dynamicRadioLayout.getChildAt(1);
-                    int subExpenseTypeSelected = tempsubExpenseGroup.getCheckedRadioButtonId();
+                // If there is a network connection, then proceed, else show toast and don't submit
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    //log based on if is budget is selected
+                    if(isBudget) {
 
-                    Log.i("sub group selection", String.valueOf(subExpenseTypeSelected));
+                        //get the main expense type and store in int (-1) means nothing selected
+                        RadioGroup tempGroupExpenseTypes = (RadioGroup) findViewById(R.id.groupExpenseType);
+                        int mainExpenseTypeSelected = tempGroupExpenseTypes.getCheckedRadioButtonId();
+                        Log.i("main group selection", String.valueOf(mainExpenseTypeSelected));
 
-                    //check that selections are made before submitting
-                    if ((mainExpenseTypeSelected != -1) && (subExpenseTypeSelected != -1)) {
-                        Log.i("mainExpenseType", expenseType);
+                        //get the second child of the dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
+                        RadioGroup tempsubExpenseGroup = (RadioGroup) dynamicRadioLayout.getChildAt(1);
+                        int subExpenseTypeSelected = tempsubExpenseGroup.getCheckedRadioButtonId();
 
-                        //store checkradio button id into a view
-                        View subSelectedRadio = tempsubExpenseGroup.findViewById(subExpenseTypeSelected);
+                        Log.i("sub group selection", String.valueOf(subExpenseTypeSelected));
 
-                        //get the index of that view relative to the group it's in
-                        int subRadioID = tempsubExpenseGroup.indexOfChild(subSelectedRadio);
+                        //check that selections are made before submitting
+                        if ((mainExpenseTypeSelected != -1) && (subExpenseTypeSelected != -1)) {
+                            Log.i("mainExpenseType", expenseType);
 
-                        //create a temp button of taht subRadioID
-                        RadioButton btnTempSelected = (RadioButton) tempsubExpenseGroup.getChildAt(subRadioID);
+                            //store checkradio button id into a view
+                            View subSelectedRadio = tempsubExpenseGroup.findViewById(subExpenseTypeSelected);
 
-                        //now get the text
-                        subExpenseType = (String) btnTempSelected.getText();
-                        Log.i("subExpenseType", subExpenseType);
+                            //get the index of that view relative to the group it's in
+                            int subRadioID = tempsubExpenseGroup.indexOfChild(subSelectedRadio);
 
-                        BudgetAsyncTask task = new BudgetAsyncTask();
-                        //now execute the async task
-                        task.execute(budgetURLString);
-                    }
+                            //create a temp button of taht subRadioID
+                            RadioButton btnTempSelected = (RadioButton) tempsubExpenseGroup.getChildAt(subRadioID);
+
+                            //now get the text
+                            subExpenseType = (String) btnTempSelected.getText();
+                            Log.i("subExpenseType", subExpenseType);
+
+                            BudgetAsyncTask task = new BudgetAsyncTask();
+                            //now execute the async task
+                            task.execute(budgetURLString);
                         }
-                     else {
+                    }
+                    else {
                         Log.i("Need to", " have popup");
                     }
+
+                }
+                else{
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "No internet connection - cannot send data.",
+                            Toast.LENGTH_LONG);
+
+                    toast.show();
+                }
+
+
 
                 /*
                 //if budget is checked then get the expense, group expense, and subexpense
@@ -159,15 +186,12 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        //instantiate checkboxes
-        final CheckBox checkBudget = (CheckBox) findViewById(R.id.checkboxBudget);
-
         //set onclicklistener for budget checkbox
         checkBudget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //update all radio buttons in the radio group to be inactive! - google
+                //update all radio buttons in the radio group to be inactive!
                 //grab the radio group associated with budget
                 RadioGroup groupExpenseTypes = (RadioGroup) findViewById(R.id.groupExpenseType);
 
@@ -182,11 +206,10 @@ public class MainActivity extends AppCompatActivity  {
 
                     //update the subexpenses dynamic group radios to be deleted
                     removeRadioGroup();
-                   // BudgetAppUtils.removeRadioGroup(dynamicRadioLayout, 1);
 
                     //clear any selection of a radio button
                     groupExpenseTypes.clearCheck();
-                  //  groupExpenseTypes.setTe
+
                     //gray-out expense area with styles
                     //loop thru radio group and set its children to not be clickable
                     for (int i = 0; i < groupExpenseTypes.getChildCount(); i++) {
@@ -218,21 +241,6 @@ public class MainActivity extends AppCompatActivity  {
 
     } //end onCreate
 
-    /*method used to add amount based on button view's text
-    public void addAmount(View v){
-        //get the view selected
-        Button clickedButton = (Button) findViewById(v.getId());
-
-        //grab only the string w/o $
-        int amount = Integer.valueOf(clickedButton.getText().toString().substring(1));
-
-        //add amount to the current total
-        this.budgetTotal = budgetTotal + amount;
-
-        //update the total display after new total calculated
-        this.updateTotalDisplay();
-    }
-    */
 
     /**
      * This method is called by any of the $ and X buttons in order to update the total amount entered.
@@ -300,7 +308,7 @@ public class MainActivity extends AppCompatActivity  {
             //if there is no result from doInBackground, do nothing
             if(result == null){
                 Toast toast = Toast.makeText(getApplicationContext(),
-                        "Could not send data",
+                        "Data was not sent",
                         Toast.LENGTH_SHORT);
 
                 toast.show();
@@ -420,9 +428,7 @@ public class MainActivity extends AppCompatActivity  {
     private void removeRadioGroup(){
         if(this.dynamicRadioLayout.getChildCount() > 1) {
             //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
-            //  Log.i("deleted child:", "dynamic group");
             dynamicRadioLayout.removeViewAt(1);
-            //dynamicRadioLayout.removeAllViews();
         }
     } //end removeRadioGroup
 
