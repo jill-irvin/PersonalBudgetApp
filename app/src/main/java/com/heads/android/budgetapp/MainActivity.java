@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity  {
      * for each of the radio buttons.
      * @param v - the radio button clicked in the UI
      */
-    private void addDynamicRadios(View v){
+    public void addDynamicRadios(View v){
         //get the view clicked id
         int selectedId = v.getId();
 
@@ -334,8 +334,6 @@ public class MainActivity extends AppCompatActivity  {
 
         //update the global variable of subexpense with selection
         expenseType = radioSelectedText;
-
-        //Log.i("creating new views for:", "daily living");
 
         //switch case to determine which radio groups to add
         switch(radioSelectedText){
