@@ -164,42 +164,48 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Entertainment" />
+                    android:text="Entertainment"
+                    android:onClick="addDynamicRadios"/>
 
                 <RadioButton
                     android:id="@+id/radioDailyLiving"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Daily Living" />
+                    android:text="Daily Living"
+                    android:onClick="addDynamicRadios"/>
 
                 <RadioButton
                     android:id="@+id/radioPersonal"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Personal" />
+                    android:text="Personal"
+                    android:onClick="addDynamicRadios"/>
 
                 <RadioButton
                     android:id="@+id/radioHealth"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Health" />
+                    android:text="Health"
+                    android:onClick="addDynamicRadios"/>
 
                 <RadioButton
                     android:id="@+id/radioCar"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Car" />
+                    android:text="Car"
+                    android:onClick="addDynamicRadios"/>
 
                 <RadioButton
                     android:id="@+id/radioHouse"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="House" />
+                    android:text="House"
+                    android:onClick="addDynamicRadios"/>
 
             </RadioGroup>
 

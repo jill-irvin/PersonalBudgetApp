@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity  {
    // protected RadioGroup dynamicRadioGroup;fds
     protected LinearLayout dynamicRadioLayout;
 //adding some comments here
+
     //global arraylists of strings for expense type sub-types
     protected String[] ENTERTAINMENT_LIST = {"Dinners", "Drinks", "Pens/Outings","Vacations", "Misc"};
     protected String[] DAILY_LIVING_LIST = {"Food", "Cleaning Supplies", "Clothing", "Personal Supplies", "Cats", "Hair", "Education", "Misc"};
@@ -431,61 +432,7 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    //method used to dyanmically create radio group and buttons based on expense type selected
-    //try to move to the utils helper class
-    //can have this return a view that can be used in the layout? - update view
-    public RadioGroup createRadioGroup(String[] radiosToCreate){
-        //Log.i("current expense type", expenseType);
-        Log.i("in create radios", " radios");
 
-        //remove any sub radios from previous selections
-       // BudgetAppUtils.removeRadioGroup(dynamicRadioLayout, 1);
-        removeRadioGroup();
-
-        //radio group to return (instead of using global group
-        RadioGroup temp = new RadioGroup(this);
-
-        //can't use string for id so you set tag then find by tag later with getTag
-        temp.setTag("dynamicRadioGroup");
-
-        //create some layout params for the group to match the first radio group in linear layout
-        RadioGroup.LayoutParams groupParams = new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.MATCH_PARENT);
-
-        //evenly space the radio group with the first group
-        groupParams.weight = 1;
-
-        //apply the parameters
-        temp.setLayoutParams(groupParams);
-
-        //make the radio group list vertical
-        temp.setOrientation(LinearLayout.VERTICAL);
-
-        //loop through the string array and create a radio button to add to the dynamicGroup
-        for(int i = 0; i< radiosToCreate.length; i++){
-            //create a radio button
-            RadioButton newButton = new RadioButton(this);
-
-            //set the text of the radio button to string array position
-            newButton.setText(radiosToCreate[i]);
-
-            //create params for the radio button
-            LinearLayout.LayoutParams tempRadioParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0);
-
-            //evenly space the radios
-            tempRadioParams.weight = 1;
-
-            newButton.setLayoutParams(tempRadioParams);
-
-            //use set tag to set the radio tag instead of id to search for later
-            newButton.setTag(radiosToCreate[i]);
-
-            //add the button to the radio group
-            temp.addView(newButton);
-        }
-
-        //return the filled-in radio group to the caller
-        return temp;
-    } //end createRadioGroup
 
 
     /**
@@ -545,6 +492,105 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    /**
+     * This method is called for each radio button click of the main expense radio group.
+     * This condenses the MainActivity code for having onClickListeners and instantiated objects
+     * for each of the radio buttons.
+     * @param v - the radio button clicked in the UI
+     */
+    private void addDynamicRadios(View v){
+        //get the view clicked id
+        int selectedId = v.getId();
+
+        //create a temp view so we can extract the text value of the view selected
+        RadioButton tempView = (RadioButton) findViewById(selectedId);
+
+        String radioSelectedText = tempView.getText().toString();
+
+        //update the global variable of subexpense with selection
+        expenseType = radioSelectedText;
+
+        //Log.i("creating new views for:", "daily living");
+
+        //switch case to determine which radio groups to add
+        switch(radioSelectedText){
+            case "Entertainment":
+                //add a radio group to the linear layout
+                dynamicRadioLayout.addView(createRadioGroup(ENTERTAINMENT_LIST));
+                break;
+            case "Daily Living":
+                dynamicRadioLayout.addView(createRadioGroup(DAILY_LIVING_LIST));
+                break;
+            case "Personal":
+                dynamicRadioLayout.addView(createRadioGroup(PERSONAL_LIST));
+                break;
+            case "Health":
+                dynamicRadioLayout.addView(createRadioGroup(HEALTH_LIST));
+                break;
+            case "Car":
+                dynamicRadioLayout.addView(createRadioGroup(CAR_LIST));
+                break;
+            case "House":
+                dynamicRadioLayout.addView(createRadioGroup(HOUSE_LIST));
+                break;
+            default:
+                Log.e("addDynamicRadios", " invalid case");
+        }
+    } //end addDynamicRadios
+
+    /**
+     * This method dynamically creates a radio group filled with buttons based on the constant String[] passed in
+     * @param radiosToCreate - which String[] to use
+     */
+    public RadioGroup createRadioGroup(String[] radiosToCreate){
+        //remove any sub radios from previous selections
+        // BudgetAppUtils.removeRadioGroup(dynamicRadioLayout, 1);
+        removeRadioGroup();
+
+        //radio group to return (instead of using global group
+        RadioGroup temp = new RadioGroup(this);
+
+        //can't use string for id so you set tag then find by tag later with getTag
+        temp.setTag("dynamicRadioGroup");
+
+        //create some layout params for the group to match the first radio group in linear layout
+        RadioGroup.LayoutParams groupParams = new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.MATCH_PARENT);
+
+        //evenly space the radio group with the first group
+        groupParams.weight = 1;
+
+        //apply the parameters
+        temp.setLayoutParams(groupParams);
+
+        //make the radio group list vertical
+        temp.setOrientation(LinearLayout.VERTICAL);
+
+        //loop through the string array and create a radio button to add to the dynamicGroup
+        for(int i = 0; i< radiosToCreate.length; i++){
+            //create a radio button
+            RadioButton newButton = new RadioButton(this);
+
+            //set the text of the radio button to string array position
+            newButton.setText(radiosToCreate[i]);
+
+            //create params for the radio button
+            LinearLayout.LayoutParams tempRadioParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0);
+
+            //evenly space the radios
+            tempRadioParams.weight = 1;
+
+            newButton.setLayoutParams(tempRadioParams);
+
+            //use set tag to set the radio tag instead of id to search for later
+            newButton.setTag(radiosToCreate[i]);
+
+            //add the button to the radio group
+            temp.addView(newButton);
+        }
+
+        //return the filled-in radio group to the caller
+        return temp;
+    } //end createRadioGroup
 
 
 }
