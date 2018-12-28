@@ -36,13 +36,13 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity  {
 
     //global variable for how much to enter into budget/credit
-    private int budgetTotal = 0;
+    protected static int budgetTotal = 0;
     private int creditTotal = 0;
 
     //keep track of what's selected
-    protected boolean isBudget = true;
+    protected static boolean isBudget = true;
     protected boolean isCredit = false;
-    protected String expenseType = null;
+    protected static String expenseType = null;
 
     //find this using the tags and second radio group - dynamic radio group; don't use on click listener
     protected String subExpenseType = null;
@@ -103,24 +103,26 @@ public class MainActivity extends AppCompatActivity  {
 
                 // If there is a network connection, then proceed, else show toast and don't submit
                 if (networkInfo != null && networkInfo.isConnected()) {
-                    //log based on if is budget is selected
-                    if(isBudget) {
 
-                        //get the main expense type and store in int (-1) means nothing selected
-                        RadioGroup tempGroupExpenseTypes = (RadioGroup) findViewById(R.id.groupExpenseType);
-                        int mainExpenseTypeSelected = tempGroupExpenseTypes.getCheckedRadioButtonId();
-                        Log.i("main group selection", String.valueOf(mainExpenseTypeSelected));
+                    //check that subExpense has been selected
+                    //get the second child of the dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
 
-                        //get the second child of the dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
+
+                    //check the selections are good
+                    String checkBudgetSelectionsResult = BudgetAppUtils.checkBudgetSelections(dynamicRadioLayout);
+
+                    if(checkBudgetSelectionsResult != null){
+                        //update the toast message with returned string
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                checkBudgetSelectionsResult,
+                                Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else{
+                        //proceed to send data
+                        Log.i("expense type is", " " + expenseType);
                         RadioGroup tempsubExpenseGroup = (RadioGroup) dynamicRadioLayout.getChildAt(1);
                         int subExpenseTypeSelected = tempsubExpenseGroup.getCheckedRadioButtonId();
-
-                        Log.i("sub group selection", String.valueOf(subExpenseTypeSelected));
-
-                        //check that selections are made before submitting
-                        if ((mainExpenseTypeSelected != -1) && (subExpenseTypeSelected != -1)) {
-                            Log.i("mainExpenseType", expenseType);
-
                             //store checkradio button id into a view
                             View subSelectedRadio = tempsubExpenseGroup.findViewById(subExpenseTypeSelected);
 
@@ -138,17 +140,12 @@ public class MainActivity extends AppCompatActivity  {
                             //now execute the async task
                             task.execute(budgetURLString);
                         }
-                    }
-                    else {
-                        Log.i("Need to", " have popup");
-                    }
 
-                }
+                } //end check for internet connection
                 else{
                     Toast toast = Toast.makeText(getApplicationContext(),
                             "No internet connection - cannot send data.",
                             Toast.LENGTH_LONG);
-
                     toast.show();
                 }
 
@@ -201,7 +198,7 @@ public class MainActivity extends AppCompatActivity  {
                     //set global of budget boolean to false
                     isBudget = false;
 
-                    //clear the expense type global
+                    //clear the expense and subexpense type global
                     expenseType = null;
 
                     //update the subexpenses dynamic group radios to be deleted
@@ -298,7 +295,7 @@ public class MainActivity extends AppCompatActivity  {
 
         /**
          * This method is invoked on the main UI thread after the background work has been completed.         *
-         * It is okay to modify the UI within this method. We take the {@link Event} object
+         * It is okay to modify the UI within this method. We take the {@link } object
          * (which was returned from the doInBackground() method) and update athe views on the screen.
          * @param result
          */
@@ -340,7 +337,7 @@ public class MainActivity extends AppCompatActivity  {
 
         String radioSelectedText = tempView.getText().toString();
 
-        //update the global variable of subexpense with selection
+        //update the global variable of expense with selection
         expenseType = radioSelectedText;
 
         //switch case to determine which radio groups to add
@@ -429,6 +426,9 @@ public class MainActivity extends AppCompatActivity  {
         if(this.dynamicRadioLayout.getChildCount() > 1) {
             //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
             dynamicRadioLayout.removeViewAt(1);
+
+            //set the subExpenseType to null
+            //this.subExpenseType = null;
         }
     } //end removeRadioGroup
 

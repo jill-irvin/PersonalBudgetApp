@@ -33,6 +33,38 @@ public class BudgetAppUtils {
         //no object to be instantiated from this lcass
     }
 
+
+    /**
+     * A method that the submit click calls to make sure the user has inputs to all fields
+     * @param dynamicRadioLayout - make sure that one has been selected
+     * @return result - to either update the toast message or proceed with data input (null means proceed)
+     */
+    public static String checkBudgetSelections(LinearLayout dynamicRadioLayout){
+        String result = null;
+
+        //check protected variables from MainActivity as well as the passed in argument
+        if(MainActivity.budgetTotal == 0)
+            result = "Enter an amount.";
+        else if(MainActivity.expenseType == null)
+            result = "You need to select an expense type";
+       // else if(subExpenseTypeSelected == 1)
+            //result =  "You need to select a sub expense";
+        else{
+            //check that subExpense has been selected
+            //get the second child of the dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
+            Log.i("passed in: ", " int " + dynamicRadioLayout.getChildCount());
+            RadioGroup tempsubExpenseGroup = (RadioGroup) dynamicRadioLayout.getChildAt(1);
+
+            int subExpenseTypeSelected = tempsubExpenseGroup.getCheckedRadioButtonId();
+            Log.i("subChecked ", " int " + subExpenseTypeSelected);
+            if(subExpenseTypeSelected == -1) {
+                result = "You need to select a sub expense";
+            }
+        }
+
+        return result;
+    }
+
     //method to get the int value of a money button
     public static int extractAmount(View v){
         int amount;
