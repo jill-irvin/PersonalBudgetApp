@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     //global variable for how much to enter into budget/credit
     protected int budgetTotal = 0;
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity  {
     //find this using the tags and second radio group - dynamic radio group; don't use on click listener
     protected String subExpenseType = null;
 
-   // protected RadioGroup dynamicRadioGroup
+    // protected RadioGroup dynamicRadioGroup
     private LinearLayout dynamicRadioLayout;
 
     private RadioGroup groupExpenseTypes;
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity  {
 //adding some comments here
 
     //global arraylists of strings for expense type sub-types
-    protected String[] ENTERTAINMENT_LIST = {"Dinners", "Drinks", "Pens/Outings","Vacations", "Misc"};
+    protected String[] ENTERTAINMENT_LIST = {"Dinners", "Drinks", "Pens/Outings", "Vacations", "Misc"};
     protected String[] DAILY_LIVING_LIST = {"Food", "Cleaning Supplies", "Clothing", "Personal Supplies", "Cats", "Hair", "Education", "Misc"};
     protected String[] PERSONAL_LIST = {"Presents for others", "Presents for ME!", "Idk...stuff"};
     private String[] HEALTH_LIST = {"Doctor's visits", "Medication", "Sports"};
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity  {
         //instantiate checkboxes
         final CheckBox checkBudget = (CheckBox) findViewById(R.id.checkboxBudget);
 
-       //final BudgetAsyncTask task = new BudgetAsyncTask();
+        //final BudgetAsyncTask task = new BudgetAsyncTask();
         //task.execute(budgetURLString);
 
         //initiate the button to be grayed-out - no b/c then have to set on click for subexpense - could for group
@@ -98,17 +98,17 @@ public class MainActivity extends AppCompatActivity  {
 
         //setup the spinner
         //java object for the xml spinner
-        Spinner monthSpinner = (Spinner) findViewById(R.id.month_spinner);
+        final Spinner monthSpinner = (Spinner) findViewById(R.id.month_spinner);
 
         //determine the current month and set the month spinner to it
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
         monthSpinner.setSelection(currentMonth);
 
         //create onclick listener for submit button that takes in what's selected and sends update to database
-        submit.setOnClickListener(new View.OnClickListener(){
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                Log.i("submit pressed: " , "yes");
+            public void onClick(View v) {
+                Log.i("submit pressed: ", "yes");
                 //Log.i("isBudget value: " , String.valueOf(isBudget));
 
                 //first check that there is internet connection before submitting
@@ -129,38 +129,41 @@ public class MainActivity extends AppCompatActivity  {
                     //check the selections are good
                     String checkBudgetSelectionsResult = BudgetAppUtils.checkBudgetSelections(budgetTotal, expenseType, dynamicRadioLayout);
 
-                    if(checkBudgetSelectionsResult != null){
+                    if (checkBudgetSelectionsResult != null) {
                         //update the toast message with returned string
                         Toast toast = Toast.makeText(getApplicationContext(),
                                 checkBudgetSelectionsResult,
                                 Toast.LENGTH_LONG);
                         toast.show();
-                    }
-                    else{
+                    } else {
                         //proceed to send data
                         Log.i("expense type is", " " + expenseType);
                         RadioGroup tempsubExpenseGroup = (RadioGroup) dynamicRadioLayout.getChildAt(1);
                         int subExpenseTypeSelected = tempsubExpenseGroup.getCheckedRadioButtonId();
-                            //store checkradio button id into a view
-                            View subSelectedRadio = tempsubExpenseGroup.findViewById(subExpenseTypeSelected);
+                        //store checkradio button id into a view
+                        View subSelectedRadio = tempsubExpenseGroup.findViewById(subExpenseTypeSelected);
 
-                            //get the index of that view relative to the group it's in
-                            int subRadioID = tempsubExpenseGroup.indexOfChild(subSelectedRadio);
+                        //get the index of that view relative to the group it's in
+                        int subRadioID = tempsubExpenseGroup.indexOfChild(subSelectedRadio);
 
-                            //create a temp button of taht subRadioID
-                            RadioButton btnTempSelected = (RadioButton) tempsubExpenseGroup.getChildAt(subRadioID);
+                        //create a temp button of taht subRadioID
+                        RadioButton btnTempSelected = (RadioButton) tempsubExpenseGroup.getChildAt(subRadioID);
 
-                            //now get the text
-                            subExpenseType = (String) btnTempSelected.getText();
-                            Log.i("subExpenseType", subExpenseType);
+                        //now get the text
+                        subExpenseType = (String) btnTempSelected.getText();
+                        Log.i("subExpenseType", subExpenseType);
 
-                            BudgetAsyncTask task = new BudgetAsyncTask();
-                            //now execute the async task
-                            task.execute(budgetURLString);
-                        }
+                        //get the text of the month spinner
+                        String month = (String) monthSpinner.getSelectedItem();
+                        Log.i("month: ", month);
+
+                        BudgetAsyncTask task = new BudgetAsyncTask();
+                        //now execute the async task
+                        task.execute(budgetURLString);
+                    }
 
                 } //end check for internet connection
-                else{
+                else {
                     Toast toast = Toast.makeText(getApplicationContext(),
                             "No internet connection - cannot send data.",
                             Toast.LENGTH_LONG);
@@ -228,7 +231,7 @@ public class MainActivity extends AppCompatActivity  {
                         groupExpenseTypes.getChildAt(i).setClickable(false);
                         //groupExpenseTypes.setBackgroundColor(Color.DKGRAY);
                         RadioButton temp = (RadioButton) findViewById(groupExpenseTypes.getChildAt(i).getId());
-                      // Log.i("radiobutton", "string color is" + temp.getTextColors().toString());
+                        // Log.i("radiobutton", "string color is" + temp.getTextColors().toString());
                         temp.setTextColor(Color.parseColor("#d3d3d3"));
                     }
 
@@ -259,7 +262,7 @@ public class MainActivity extends AppCompatActivity  {
      * up the associated onClick listeners
      */
     //method used to update the amount displayed on the textview
-    public void updateTotalDisplay(View v){
+    public void updateTotalDisplay(View v) {
         //the UI view to update
         //TextView totalView = (TextView) findViewById(R.id.textAmount);
 
@@ -267,11 +270,10 @@ public class MainActivity extends AppCompatActivity  {
         int selectedAmount = BudgetAppUtils.extractAmount(v);
 
         //if the value returned is 0 then clear the budgetTotal
-        if(selectedAmount == 0){
+        if (selectedAmount == 0) {
             budgetTotal = 0;
             this.totalView.setText("");
-        }
-        else {
+        } else {
             //update the budgetTotal with selected value
             budgetTotal = budgetTotal + selectedAmount;
             this.totalView.setText(String.valueOf(this.budgetTotal));
@@ -282,13 +284,14 @@ public class MainActivity extends AppCompatActivity  {
     /**
      * {@link AsyncTask} to perform the network request on a background thread
      */
-    private class BudgetAsyncTask extends AsyncTask<String, Void, String>{
+    private class BudgetAsyncTask extends AsyncTask<String, Void, String> {
         /**
          * This method is invoked on a background thread, so we can perform long-running
          * operations like making a network request.
-         *
+         * <p>
          * It is not okay to update the UI from a background thread, so we just return an
          * {@link String} object as the result.
+         *
          * @param urls
          * @return
          */
@@ -296,7 +299,7 @@ public class MainActivity extends AppCompatActivity  {
         protected String doInBackground(String... urls) {
 
             //don't perform the request if there are no URLs, or the first URL is null
-            if(urls.length < 1 || urls[0] == null){
+            if (urls.length < 1 || urls[0] == null) {
                 return null;
             }
 
@@ -311,13 +314,14 @@ public class MainActivity extends AppCompatActivity  {
          * This method is invoked on the main UI thread after the background work has been completed.         *
          * It is okay to modify the UI within this method. We take the {@link } object
          * (which was returned from the doInBackground() method) and update athe views on the screen.
+         *
          * @param result
          */
         @Override
-        protected void onPostExecute(String result){
+        protected void onPostExecute(String result) {
 
             //if there is no result from doInBackground, do nothing
-            if(result == null){
+            if (result == null) {
                 Toast toast = Toast.makeText(getApplicationContext(),
                         "Data was not sent",
                         Toast.LENGTH_SHORT);
@@ -341,7 +345,7 @@ public class MainActivity extends AppCompatActivity  {
      * This method is called after a successful post of data.
      * It clears the global variables of data as well as any radio selections
      */
-    private void clearUI(){
+    private void clearUI() {
 
         //clear the expense and subexpense type global
         this.expenseType = null;
@@ -363,9 +367,10 @@ public class MainActivity extends AppCompatActivity  {
      * This method is called for each radio button click of the main expense radio group.
      * This condenses the MainActivity code for having onClickListeners and instantiated objects
      * for each of the radio buttons.
+     *
      * @param v - the radio button clicked in the UI
      */
-    public void addDynamicRadios(View v){
+    public void addDynamicRadios(View v) {
         //get the view clicked id
         int selectedId = v.getId();
 
@@ -378,7 +383,7 @@ public class MainActivity extends AppCompatActivity  {
         expenseType = radioSelectedText;
 
         //switch case to determine which radio groups to add
-        switch(radioSelectedText){
+        switch (radioSelectedText) {
             case "Entertainment":
                 //add a radio group to the linear layout
                 dynamicRadioLayout.addView(createRadioGroup(ENTERTAINMENT_LIST));
@@ -405,9 +410,10 @@ public class MainActivity extends AppCompatActivity  {
 
     /**
      * This method dynamically creates a radio group filled with buttons based on the constant String[] passed in
+     *
      * @param radiosToCreate - which String[] to use
      */
-    public RadioGroup createRadioGroup(String[] radiosToCreate){
+    public RadioGroup createRadioGroup(String[] radiosToCreate) {
         //remove any sub radios from previous selections
         // BudgetAppUtils.removeRadioGroup(dynamicRadioLayout, 1);
         removeRadioGroup();
@@ -431,7 +437,7 @@ public class MainActivity extends AppCompatActivity  {
         temp.setOrientation(LinearLayout.VERTICAL);
 
         //loop through the string array and create a radio button to add to the dynamicGroup
-        for(int i = 0; i< radiosToCreate.length; i++){
+        for (int i = 0; i < radiosToCreate.length; i++) {
             //create a radio button
             RadioButton newButton = new RadioButton(this);
 
@@ -459,8 +465,8 @@ public class MainActivity extends AppCompatActivity  {
 
 
     //method to remove sub radios from dynamic radio group
-    private void removeRadioGroup(){
-        if(this.dynamicRadioLayout.getChildCount() > 1) {
+    private void removeRadioGroup() {
+        if (this.dynamicRadioLayout.getChildCount() > 1) {
             //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
             dynamicRadioLayout.removeViewAt(1);
 
