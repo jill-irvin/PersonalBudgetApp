@@ -3,6 +3,7 @@ package com.heads.android.budgetapp;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.icu.util.BuddhistCalendar;
 import android.icu.util.Calendar;
@@ -75,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //set the app to only be in portrait orientation (could add to manifest file)
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         //this is the radio group that changes based on the expense type selected
         this.dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
         //this radio group is for the main expenses
@@ -137,8 +141,20 @@ public class MainActivity extends AppCompatActivity {
                         toast.show();
                     } else {
                         //proceed to send data
+
+                        //***instead of instantiating objects - what if just get position selected of radio groups
+                        //***and then use that index in the constant string arrays used to populate those radio groups
+                        //can't b/c would have to do switch of expense type selected to determine which array to use for indexing
+
+                        //expense type global variable is updated when created the subexpenses and cleared elsewhere so
+                        //don't need to extract from radio group
+                        //however, subexpense type doesn't have an onclick listeners to update who was selected
+
                         Log.i("expense type is", " " + expenseType);
+
+                       // dynamicRadioLayout.getChildAt(1).
                         RadioGroup tempsubExpenseGroup = (RadioGroup) dynamicRadioLayout.getChildAt(1);
+
                         int subExpenseTypeSelected = tempsubExpenseGroup.getCheckedRadioButtonId();
                         //store checkradio button id into a view
                         View subSelectedRadio = tempsubExpenseGroup.findViewById(subExpenseTypeSelected);
@@ -156,6 +172,9 @@ public class MainActivity extends AppCompatActivity {
                         //get the text of the month spinner
                         String month = (String) monthSpinner.getSelectedItem();
                         Log.i("month: ", month);
+
+                        //execute for budget then another for credit? - or pass in 2 urls - one for budget one for credit?
+                        //var args should know what to do - but need to update to loop the number of args
 
                         BudgetAsyncTask task = new BudgetAsyncTask();
                         //now execute the async task
