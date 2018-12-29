@@ -18,24 +18,37 @@
         android:paddingBottom="5dp"
         android:orientation="horizontal">
 
-        <CheckBox
-            android:id="@+id/checkboxJoint"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
+            android:orientation="vertical">
 
-            android:text="Joint Acct." />
+            <CheckBox
+                android:id="@+id/checkboxBudget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Budget" />
 
-        <CheckBox
-            android:id="@+id/checkboxBudget"
+            <CheckBox
+                android:id="@+id/checkboxJoint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Joint Acct." />
+
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/month_spinner"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-
-            android:checked="true"
-            android:text="Budget" />
+            android:spinnerMode="dropdown"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_vertical"
+            android:entries="@array/month_array"
+            />
 
     </LinearLayout>
 

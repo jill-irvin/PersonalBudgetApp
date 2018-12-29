@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.icu.util.BuddhistCalendar;
+import android.icu.util.Calendar;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -20,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -74,10 +77,8 @@ public class MainActivity extends AppCompatActivity  {
 
         //this is the radio group that changes based on the expense type selected
         this.dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
-
         //this radio group is for the main expenses
         this.groupExpenseTypes = (RadioGroup) findViewById(R.id.groupExpenseType);
-
         //create the textview that shows the total amount
         this.totalView = (TextView) findViewById(R.id.textAmount);
 
@@ -86,7 +87,6 @@ public class MainActivity extends AppCompatActivity  {
 
         //instantiate submit button
         final Button submit = (Button) findViewById(R.id.buttonSubmit);
-
         //instantiate checkboxes
         final CheckBox checkBudget = (CheckBox) findViewById(R.id.checkboxBudget);
 
@@ -95,6 +95,14 @@ public class MainActivity extends AppCompatActivity  {
 
         //initiate the button to be grayed-out - no b/c then have to set on click for subexpense - could for group
         //submit.setClickable(false);
+
+        //setup the spinner
+        //java object for the xml spinner
+        Spinner monthSpinner = (Spinner) findViewById(R.id.month_spinner);
+
+        //determine the current month and set the month spinner to it
+        int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+        monthSpinner.setSelection(currentMonth);
 
         //create onclick listener for submit button that takes in what's selected and sends update to database
         submit.setOnClickListener(new View.OnClickListener(){
@@ -344,11 +352,11 @@ public class MainActivity extends AppCompatActivity  {
 
         this.totalView.setText("");
 
-        //update the subexpenses dynamic group radios to be deleted
-        removeRadioGroup();
-
         //clear any selection of a radio button
         groupExpenseTypes.clearCheck();
+
+        //update the subexpenses dynamic group radios to be deleted
+        removeRadioGroup();
     }
 
     /**
