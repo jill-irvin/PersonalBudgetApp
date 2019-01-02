@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         //this.groupExpenseTypes = (RadioGroup) findViewById(R.id.expenseTypeRadioGroup);
         //create the textview that shows the total amount
         this.totalView = (TextView) findViewById(R.id.textAmount);
-
+        Log.i("on create", " adding views");
         //dynamically creat the budget expense radio buttons on app start-up
         //add a radio group to the linear layout
 
@@ -455,10 +455,11 @@ public class MainActivity extends AppCompatActivity {
      * @param radiosToCreate - which String[] to use
      */
     public RadioGroup createRadioGroup(String[] radiosToCreate, String tagName, LinearLayout parentLayout) {
+        Log.i("Creating radio group" , tagName);
         //remove any sub radios from previous selections
         // BudgetAppUtils.removeRadioGroup(dynamicRadioLayout, 1);
         //remove only the subRadios by using 1 as the second parameter
-        removeRadioGroup(parentLayout, 1);
+        removeSubRadioGroup(parentLayout);
         //parentLayout.removeAllViewsInLayout();
 
         //radio group to return (instead of using global group
@@ -565,28 +566,19 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method is used to remove a radio group in a linear layout. It's called for when a new
      * radio is selected or when a checkbox is cleared.
-     * @param option - option determines what radios to remove
      * @param parentLayout - the layout to remove radios from
      */
-    private void removeRadioGroup(LinearLayout parentLayout, int option) {
+    private void removeSubRadioGroup(LinearLayout parentLayout) {
     //    private void removeRadioGroup(int child) {
         //parentLayout.removeViewAt(child);
 
-        if(option == 0){
-            parentLayout.removeAllViews();
-        }
-        else if(option == 1) {
-            //if (parentLayout.getChildCount() > 1) {
-            //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
-            parentLayout.removeViewAt(1);
-
+            if (parentLayout.getChildCount() > 1) {
+                //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
+                parentLayout.removeViewAt(1);
+            }
             //set the subExpenseType to null
             this.subExpenseType = null;
-            //}
-        }
-        else{
-            Log.i("removeRadioGroup" , " error");
-        }
+
     } //end removeRadioGroup
 
 
