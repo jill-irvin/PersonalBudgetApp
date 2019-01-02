@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 //adding some comments here
 
     //global arrays of strings for budget expense types
-    private String[] BUDGET_LIST = {"Entertainment", "Daily Living", "Personal", "Car", "Health Stuff", "House"};
+    private String[] BUDGET_LIST = {"Entertainment", "Daily Living", "Personal", "Car", "Health", "House"};
     //global arraylists of strings for expense type sub-types
     private String[] ENTERTAINMENT_LIST = {"Dinners", "Drinks", "Pens/Outings", "Vacations", "Misc"};
     private String[] DAILY_LIVING_LIST = {"Food", "Clean", "Clothes", "Self", "Cats", "Hair", "Edu", "Misc"};
