@@ -163,13 +163,15 @@
             />
 
         <LinearLayout
-            android:id="@+id/radioGroupLayout"
+            android:id="@+id/budgetTypeLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
+            <!-- No long need
             <RadioGroup
-                android:id="@+id/groupExpenseType"
+                android:id="@+id/expenseTypeRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -241,7 +243,15 @@
                     android:onClick="addDynamicRadios"/>
 
             </RadioGroup>
+-->
+        </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/creditTypeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
         </LinearLayout>
 
     </LinearLayout>

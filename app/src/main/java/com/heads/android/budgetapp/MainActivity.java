@@ -56,17 +56,19 @@ public class MainActivity extends AppCompatActivity {
     protected String subExpenseType = null;
 
     // protected RadioGroup dynamicRadioGroup
-    private LinearLayout dynamicExpenseRadioLayout;
+    private LinearLayout budgetTypeLayout;
 
     private RadioGroup groupExpenseTypes;
 
     private TextView totalView;
 //adding some comments here
 
+    //global arrays of strings for budget expense types
+    private String[] BUDGET_LIST = {"Entertainment", "Daily Living", "Personal", "Car", "Health Stuff", "House"};
     //global arraylists of strings for expense type sub-types
-    protected String[] ENTERTAINMENT_LIST = {"Dinners", "Drinks", "Pens/Outings", "Vacations", "Misc"};
-    protected String[] DAILY_LIVING_LIST = {"Food", "Cleaning Supplies", "Clothing", "Personal Supplies", "Cats", "Hair", "Education", "Misc"};
-    protected String[] PERSONAL_LIST = {"Presents for others", "Presents for ME!", "Idk...stuff"};
+    private String[] ENTERTAINMENT_LIST = {"Dinners", "Drinks", "Pens/Outings", "Vacations", "Misc"};
+    private String[] DAILY_LIVING_LIST = {"Food", "Clean", "Clothes", "Self", "Cats", "Hair", "Edu", "Misc"};
+    private String[] PERSONAL_LIST = {"Presents for others", "Presents for ME!", "Idk...stuff"};
     private String[] HEALTH_LIST = {"Doctor's visits", "Medication", "Sports"};
     private String[] CAR_LIST = {"Fuel", "Maintenance", "Car insurance", "Registration"};
     private String[] HOUSE_LIST = {"Maintenance/Supplies", "Cable/Internet", "Electric", "Water/Sewage", "Cell Phone", "Improvements"};
@@ -84,11 +86,15 @@ public class MainActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //this is the radio group that changes based on the expense type selected
-        this.dynamicExpenseRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
+        this.budgetTypeLayout = (LinearLayout) findViewById(R.id.budgetTypeLayout);
         //this radio group is for the main expenses
-        this.groupExpenseTypes = (RadioGroup) findViewById(R.id.groupExpenseType);
+        this.groupExpenseTypes = (RadioGroup) findViewById(R.id.expenseTypeRadioGroup);
         //create the textview that shows the total amount
         this.totalView = (TextView) findViewById(R.id.textAmount);
+
+        //dynamically creat the budget expense radio buttons on app start-up
+        //add a radio group to the linear layout
+        budgetTypeLayout.addView(createRadioGroup(BUDGET_LIST, "budgetExpenseType"));
 
         //no longer need to instantiate radio button expense types for on click listeners
         //no longer need to instantiate $ buttons for on click listeners
@@ -136,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     //check the selections are good
-                    String checkBudgetSelectionsResult = BudgetAppUtils.checkBudgetSelections(budgetTotal, expenseType, dynamicExpenseRadioLayout);
+                    String checkBudgetSelectionsResult = BudgetAppUtils.checkBudgetSelections(budgetTotal, expenseType, budgetTypeLayout);
 
                     if (checkBudgetSelectionsResult != null) {
                         //update the toast message with returned string
@@ -158,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.i("expense type is", " " + expenseType);
 
                        // dynamicRadioLayout.getChildAt(1).
-                        RadioGroup tempsubExpenseGroup = (RadioGroup) dynamicExpenseRadioLayout.getChildAt(1);
+                        RadioGroup tempsubExpenseGroup = (RadioGroup) budgetTypeLayout.getChildAt(1);
 
                         int subExpenseTypeSelected = tempsubExpenseGroup.getCheckedRadioButtonId();
                         //store checkradio button id into a view
@@ -409,26 +415,29 @@ public class MainActivity extends AppCompatActivity {
         //update the global variable of expense with selection
         expenseType = radioSelectedText;
 
+        //add tagName to new radiogroup
+        String tagName = "expenseType";
+
         //switch case to determine which radio groups to add
         switch (radioSelectedText) {
             case "Entertainment":
                 //add a radio group to the linear layout
-                dynamicExpenseRadioLayout.addView(createRadioGroup(ENTERTAINMENT_LIST));
+                budgetTypeLayout.addView(createRadioGroup(ENTERTAINMENT_LIST, tagName));
                 break;
             case "Daily Living":
-                dynamicExpenseRadioLayout.addView(createRadioGroup(DAILY_LIVING_LIST));
+                budgetTypeLayout.addView(createRadioGroup(DAILY_LIVING_LIST, tagName));
                 break;
             case "Personal":
-                dynamicExpenseRadioLayout.addView(createRadioGroup(PERSONAL_LIST));
+                budgetTypeLayout.addView(createRadioGroup(PERSONAL_LIST, tagName));
                 break;
             case "Health":
-                dynamicExpenseRadioLayout.addView(createRadioGroup(HEALTH_LIST));
+                budgetTypeLayout.addView(createRadioGroup(HEALTH_LIST, tagName));
                 break;
             case "Car":
-                dynamicExpenseRadioLayout.addView(createRadioGroup(CAR_LIST));
+                budgetTypeLayout.addView(createRadioGroup(CAR_LIST, tagName));
                 break;
             case "House":
-                dynamicExpenseRadioLayout.addView(createRadioGroup(HOUSE_LIST));
+                budgetTypeLayout.addView(createRadioGroup(HOUSE_LIST, tagName));
                 break;
             default:
                 Log.e("addDynamicRadios", " invalid case");
@@ -440,16 +449,16 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param radiosToCreate - which String[] to use
      */
-    public RadioGroup createRadioGroup(String[] radiosToCreate) {
+    public RadioGroup createRadioGroup(String[] radiosToCreate, String tagName) {
         //remove any sub radios from previous selections
         // BudgetAppUtils.removeRadioGroup(dynamicRadioLayout, 1);
-        removeRadioGroup();
+        //removeRadioGroup();
 
         //radio group to return (instead of using global group
         RadioGroup tempRadioGroup = new RadioGroup(this);
 
         //can't use string for id so you set tag then find by tag later with getTag
-        tempRadioGroup.setTag("dynamicRadioGroup");
+        tempRadioGroup.setTag(tagName);
 
         //create some layout params for the group to match the first radio group in linear layout
         //RadioGroup.LayoutParams groupParams = new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.MATCH_PARENT);
@@ -527,15 +536,27 @@ public class MainActivity extends AppCompatActivity {
     } //end createRadioGroup
 
 
-    //method to remove sub radios from dynamic radio group
-    private void removeRadioGroup() {
-        if (this.dynamicExpenseRadioLayout.getChildCount() > 1) {
+
+    //method to remove a radio group of a linear layout
+
+    /**
+     * This method is used to remove a radio group in a linear layout. It's called for when a new
+     * radio is selected or when a checkbox is cleared.
+     * @param parentLayout
+     * @param child
+     */
+    //private void removeRadioGroup(LinearLayout parentLayout, int child) {
+        private void removeRadioGroup() {
+        //parentLayout.removeViewAt(child);
+
+
+        //if (this.budgetTypeLayout.getChildCount() > 1) {
             //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
-            dynamicExpenseRadioLayout.removeViewAt(1);
+           // budgetTypeLayout.removeViewAt(1);
 
             //set the subExpenseType to null
             //this.subExpenseType = null;
-        }
+        //}
     } //end removeRadioGroup
 
 
