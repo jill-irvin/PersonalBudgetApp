@@ -4,13 +4,17 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.icu.util.BuddhistCalendar;
 import android.icu.util.Calendar;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     protected String subExpenseType = null;
 
     // protected RadioGroup dynamicRadioGroup
-    private LinearLayout dynamicRadioLayout;
+    private LinearLayout dynamicExpenseRadioLayout;
 
     private RadioGroup groupExpenseTypes;
 
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //this is the radio group that changes based on the expense type selected
-        this.dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
+        this.dynamicExpenseRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
         //this radio group is for the main expenses
         this.groupExpenseTypes = (RadioGroup) findViewById(R.id.groupExpenseType);
         //create the textview that shows the total amount
@@ -93,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         final Button submit = (Button) findViewById(R.id.buttonSubmit);
         //instantiate checkboxes
         final CheckBox checkBudget = (CheckBox) findViewById(R.id.checkboxBudget);
+        //checkBudget.setChecked(true);
 
         //final BudgetAsyncTask task = new BudgetAsyncTask();
         //task.execute(budgetURLString);
@@ -131,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     //check the selections are good
-                    String checkBudgetSelectionsResult = BudgetAppUtils.checkBudgetSelections(budgetTotal, expenseType, dynamicRadioLayout);
+                    String checkBudgetSelectionsResult = BudgetAppUtils.checkBudgetSelections(budgetTotal, expenseType, dynamicExpenseRadioLayout);
 
                     if (checkBudgetSelectionsResult != null) {
                         //update the toast message with returned string
@@ -153,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.i("expense type is", " " + expenseType);
 
                        // dynamicRadioLayout.getChildAt(1).
-                        RadioGroup tempsubExpenseGroup = (RadioGroup) dynamicRadioLayout.getChildAt(1);
+                        RadioGroup tempsubExpenseGroup = (RadioGroup) dynamicExpenseRadioLayout.getChildAt(1);
 
                         int subExpenseTypeSelected = tempsubExpenseGroup.getCheckedRadioButtonId();
                         //store checkradio button id into a view
@@ -390,6 +395,7 @@ public class MainActivity extends AppCompatActivity {
      * @param v - the radio button clicked in the UI
      */
     public void addDynamicRadios(View v) {
+
         //get the view clicked id
         int selectedId = v.getId();
 
@@ -398,6 +404,8 @@ public class MainActivity extends AppCompatActivity {
 
         String radioSelectedText = tempView.getText().toString();
 
+        Log.i("add dyanmic radio: " , radioSelectedText);
+
         //update the global variable of expense with selection
         expenseType = radioSelectedText;
 
@@ -405,22 +413,22 @@ public class MainActivity extends AppCompatActivity {
         switch (radioSelectedText) {
             case "Entertainment":
                 //add a radio group to the linear layout
-                dynamicRadioLayout.addView(createRadioGroup(ENTERTAINMENT_LIST));
+                dynamicExpenseRadioLayout.addView(createRadioGroup(ENTERTAINMENT_LIST));
                 break;
             case "Daily Living":
-                dynamicRadioLayout.addView(createRadioGroup(DAILY_LIVING_LIST));
+                dynamicExpenseRadioLayout.addView(createRadioGroup(DAILY_LIVING_LIST));
                 break;
             case "Personal":
-                dynamicRadioLayout.addView(createRadioGroup(PERSONAL_LIST));
+                dynamicExpenseRadioLayout.addView(createRadioGroup(PERSONAL_LIST));
                 break;
             case "Health":
-                dynamicRadioLayout.addView(createRadioGroup(HEALTH_LIST));
+                dynamicExpenseRadioLayout.addView(createRadioGroup(HEALTH_LIST));
                 break;
             case "Car":
-                dynamicRadioLayout.addView(createRadioGroup(CAR_LIST));
+                dynamicExpenseRadioLayout.addView(createRadioGroup(CAR_LIST));
                 break;
             case "House":
-                dynamicRadioLayout.addView(createRadioGroup(HOUSE_LIST));
+                dynamicExpenseRadioLayout.addView(createRadioGroup(HOUSE_LIST));
                 break;
             default:
                 Log.e("addDynamicRadios", " invalid case");
@@ -438,22 +446,31 @@ public class MainActivity extends AppCompatActivity {
         removeRadioGroup();
 
         //radio group to return (instead of using global group
-        RadioGroup temp = new RadioGroup(this);
+        RadioGroup tempRadioGroup = new RadioGroup(this);
 
         //can't use string for id so you set tag then find by tag later with getTag
-        temp.setTag("dynamicRadioGroup");
+        tempRadioGroup.setTag("dynamicRadioGroup");
 
         //create some layout params for the group to match the first radio group in linear layout
-        RadioGroup.LayoutParams groupParams = new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.MATCH_PARENT);
+        //RadioGroup.LayoutParams groupParams = new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.MATCH_PARENT);
+        RadioGroup.LayoutParams groupParams = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+
 
         //evenly space the radio group with the first group
-        groupParams.weight = 1;
+        //groupParams.weight = 1;
 
         //apply the parameters
-        temp.setLayoutParams(groupParams);
+        tempRadioGroup.setLayoutParams(groupParams);
 
         //make the radio group list vertical
-        temp.setOrientation(LinearLayout.VERTICAL);
+        //temp.setOrientation(LinearLayout.VERTICAL);
+        tempRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
+
+        //create params for the radio button - width, height
+        // LinearLayout.LayoutParams tempRadioParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0);
+        LinearLayout.LayoutParams tempRadioParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
+        //evenly space the radios
+        tempRadioParams.weight = 1;
 
         //loop through the string array and create a radio button to add to the dynamicGroup
         for (int i = 0; i < radiosToCreate.length; i++) {
@@ -463,31 +480,58 @@ public class MainActivity extends AppCompatActivity {
             //set the text of the radio button to string array position
             newButton.setText(radiosToCreate[i]);
 
-            //create params for the radio button
-            LinearLayout.LayoutParams tempRadioParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0);
-
-            //evenly space the radios
-            tempRadioParams.weight = 1;
-
             newButton.setLayoutParams(tempRadioParams);
+
+            newButton.setButtonDrawable(null);
+
+           // TypedArray a = getTheme().obtainStyledAttributes(R.style.AppTheme, new int[] {android.R.attr.listChoiceIndicatorSingle});
+           // int attributeResourceId = a.getResourceId(0, 0);
+           // Drawable drawable = getResources().getDrawable(attributeResourceId);
+            TypedArray a = getTheme().obtainStyledAttributes(R.style.AppTheme, new int[] {android.R.attr.listChoiceIndicatorSingle});
+            int attributeResourceId = a.getResourceId(0, 0);
+            Drawable drawable = getResources().getDrawable(attributeResourceId, getApplicationContext().getTheme());
+            //Drawable drawable = getResources().getDrawable(attributeResourceId);
+            //TypedArray a = getTheme().obtainStyledAttributes(R.style.AppTheme, new int[] {android.R.attr.listChoiceIndicatorSingle});
+            //TypedArray a = getTheme().obtainStyledAttributes(R.style.AppTheme, new int[] {android.R.attr.radioButtonStyle});
+
+           // int attributeResourceId = a.getResourceId(0, 0);
+
+           // Drawable drawable = getResources().getDrawable(attributeResourceId, getApplicationContext().getTheme());
+            //drawable = ContextCompat.getDrawable(getCallingActivity(), R.drawable.)
+            //newButton.setCompoundDrawablesWithIntrinsicBounds(0,0,0, attributeResourceId);
+            newButton.setCompoundDrawablesWithIntrinsicBounds(null,null,null, drawable);
+
+
+            // Resources.getDrawable(int, Theme)
+            ///Drawable drawable = Resources.getDr
+           // Resources.getSystem().getDrawable(0 , Resources.Theme AppTheme);
+                   // getResources().getDrawable(attributeResourceId);
+          //  newButton.setCompoundDrawablesWithIntrinsicBounds(null, null, null, drawable);
+
+           // newButton.setCompoundDrawablesWithIntrinsicBounds(0,0,0, Resources.getSystem().getDrawable(R.drawable.btn_radio)
+                   // R.drawable.btn);
+
+            newButton.setGravity(Gravity.CENTER);
+
+            //newButton.setButtonDrawable(@);
 
             //use set tag to set the radio tag instead of id to search for later
             newButton.setTag(radiosToCreate[i]);
 
             //add the button to the radio group
-            temp.addView(newButton);
+            tempRadioGroup.addView(newButton);
         }
 
         //return the filled-in radio group to the caller
-        return temp;
+        return tempRadioGroup;
     } //end createRadioGroup
 
 
     //method to remove sub radios from dynamic radio group
     private void removeRadioGroup() {
-        if (this.dynamicRadioLayout.getChildCount() > 1) {
+        if (this.dynamicExpenseRadioLayout.getChildCount() > 1) {
             //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
-            dynamicRadioLayout.removeViewAt(1);
+            dynamicExpenseRadioLayout.removeViewAt(1);
 
             //set the subExpenseType to null
             //this.subExpenseType = null;

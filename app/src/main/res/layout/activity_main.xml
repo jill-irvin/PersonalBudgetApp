@@ -159,74 +159,88 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Expense Type"
-
+            android:paddingBottom="5dp"
             />
 
         <LinearLayout
             android:id="@+id/radioGroupLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <RadioGroup
                 android:id="@+id/groupExpenseType"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/radioEntertainment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:text="Entertainment"
+                    android:drawableBottom="@android:drawable/btn_radio"
+                    android:gravity="center"
+                    android:button="@null"
+                    android:layout_weight ="1"
                     android:onClick="addDynamicRadios"/>
 
                 <RadioButton
                     android:id="@+id/radioDailyLiving"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:drawableBottom="@android:drawable/btn_radio"
+                    android:gravity="center"
+                    android:button="@null"
                     android:text="Daily Living"
                     android:onClick="addDynamicRadios"/>
 
                 <RadioButton
                     android:id="@+id/radioPersonal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Personal"
+                    android:drawableBottom="@android:drawable/btn_radio"
+                    android:gravity="center"
+                    android:button="@null"
                     android:onClick="addDynamicRadios"/>
 
                 <RadioButton
                     android:id="@+id/radioHealth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Health"
+                    android:drawableBottom="@android:drawable/btn_radio"
+                    android:gravity="center"
+                    android:button="@null"
                     android:onClick="addDynamicRadios"/>
 
                 <RadioButton
                     android:id="@+id/radioCar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:drawableBottom="@android:drawable/btn_radio"
+                    android:gravity="center"
+                    android:button="@null"
                     android:text="Car"
                     android:onClick="addDynamicRadios"/>
 
                 <RadioButton
                     android:id="@+id/radioHouse"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:drawableBottom="@android:drawable/btn_radio"
+                    android:gravity="center"
+                    android:button="@null"
                     android:text="House"
                     android:onClick="addDynamicRadios"/>
 
             </RadioGroup>
-
-
-
 
         </LinearLayout>
 
