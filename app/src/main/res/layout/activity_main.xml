@@ -165,8 +165,7 @@
         <LinearLayout
             android:id="@+id/budgetTypeLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <!-- No long need
@@ -249,8 +248,8 @@
         <LinearLayout
             android:id="@+id/creditTypeLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+
             android:orientation="vertical">
         </LinearLayout>
 
