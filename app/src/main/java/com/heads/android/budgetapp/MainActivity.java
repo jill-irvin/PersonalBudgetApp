@@ -251,9 +251,11 @@ public class MainActivity extends AppCompatActivity {
 
                     //clear the expense and subexpense type global
                     expenseType = null;
+                    subExpenseType = null;
 
                     //update the subexpenses dynamic group radios to be deleted
                     //removeRadioGroup();
+                    budgetTypeLayout.removeAllViewsInLayout();
 
                     //clear any selection of a radio button
                     //groupExpenseTypes.clearCheck();
@@ -273,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     //update global budget boolean to true
                     isBudget = true;
+                    budgetTypeLayout.addView(createRadioGroup(BUDGET_LIST, tagNameforBudget, budgetTypeLayout));
 
                     //make sure clickable
                     //loop thru radio group and set its children to be clickable
