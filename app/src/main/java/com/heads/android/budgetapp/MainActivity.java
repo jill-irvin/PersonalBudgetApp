@@ -472,6 +472,26 @@ public class MainActivity extends AppCompatActivity {
         //get the tagname of the radio group
         String tagNameGroup = tempGroup.getTag().toString();
 
+        if(tagNameGroup.equalsIgnoreCase(this.tagNameforBudget)){
+            this.expenseType = radioSelectedText;
+            Log.i("update global : " , radioSelectedText);
+        }
+        else if(tagNameGroup.equalsIgnoreCase(this.tagNameSubCredit)){
+            this.creditType = radioSelectedText;
+            Log.i("update global : " , radioSelectedText);
+        }
+        else if(tagNameGroup.equalsIgnoreCase(this.tagNameSubExpense)){
+            this.subExpenseType = radioSelectedText;
+            Log.i("update global : " , radioSelectedText);
+        }
+        else if(tagNameGroup.equalsIgnoreCase(this.tagNameSubCredit)){
+            this.subCreditType = radioSelectedText;
+            Log.i("update global : " , radioSelectedText);
+        }
+        else{
+            Log.i("error updateGlobal: " , radioSelectedText);
+        }
+/*
         switch (tagNameGroup){
             case "subExpenseType":
                 //update the global subexpenseType variable
@@ -489,8 +509,7 @@ public class MainActivity extends AppCompatActivity {
             default:
                 Log.i("error updateGlobal: " , radioSelectedText);
         }
-
-        Log.i("update variables: " , radioSelectedText);
+        */
     }
 
 
