@@ -67,11 +67,11 @@ public class MainActivity extends AppCompatActivity {
     private String[] BUDGET_LIST = {"Entertainment", "Daily Living", "Personal", "Car", "Health", "House"};
     //global arraylists of strings for expense type sub-types
     private String[] ENTERTAINMENT_LIST = {"Dinners", "Drinks", "Pens/Outings", "Vacations", "Misc"};
-    private String[] DAILY_LIVING_LIST = {"Food", "Clean", "Clothes", "Self", "Cats", "Hair", "Edu", "Misc"};
+    private String[] DAILY_LIVING_LIST = {"Clothes", "Food", "Clean", "Self", "Cats", "Hair", "Edu", "Misc"};
     private String[] PERSONAL_LIST = {"Presents for others", "Presents for ME!", "Idk...stuff"};
-    private String[] HEALTH_LIST = {"Doctor's visits", "Medication", "Sports"};
-    private String[] CAR_LIST = {"Fuel", "Maintenance", "Car insurance", "Registration"};
-    private String[] HOUSE_LIST = {"Maintenance/Supplies", "Cable/Internet", "Electric", "Water/Sewage", "Cell Phone", "Improvements"};
+    private String[] HEALTH_LIST = {"Sports", "Doctor's visits", "Medication"};
+    private String[] CAR_LIST = {"Car insurance", "Registration", "Fuel", "Maintenance"};
+    private String[] HOUSE_LIST = {"Cell Phone", "Cable/Internet", "Electric", "Water/Sewage", "Supplies", "Improvements"};
 
     private String tagNameforBudget = "budgetRadioGroup";
     private String tagNameforCredit = "creditRadioGroup";
@@ -486,6 +486,8 @@ public class MainActivity extends AppCompatActivity {
         //make the radio group list vertical
         //temp.setOrientation(LinearLayout.VERTICAL);
         tempRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
+
+        tempRadioGroup.setPadding(0, 15, 0, 15);
 
         //create params for the radio button - width, height
         // LinearLayout.LayoutParams tempRadioParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0);
