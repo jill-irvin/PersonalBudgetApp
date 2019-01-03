@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //set onclicklistener for budget checkbox
+        //set onclicklistener for credit checkbox
         checkBudget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -293,7 +293,9 @@ public class MainActivity extends AppCompatActivity {
                    // }
                 }
             }
-        });
+        });  //end on click listener for checkBudget checkbox
+
+        //set onClickListener for credit checkbox
 
 
     } //end onCreate
@@ -531,6 +533,8 @@ public class MainActivity extends AppCompatActivity {
 
         //can't use string for id so you set tag then find by tag later with getTag
         tempRadioGroup.setTag(tagName);
+
+        Log.i("RadioGroup tag " , tempRadioGroup.getTag().toString());
         //tempRadioGroup.setI
 
         //create some layout params for the group to match the first radio group in linear layout
@@ -651,24 +655,30 @@ public class MainActivity extends AppCompatActivity {
     private void removeSubRadioGroup(LinearLayout parentLayout) {
     //    private void removeRadioGroup(int child) {
         //parentLayout.removeViewAt(child);
+        //parentLayout.getChildAt(1).getT
+        //Log.i("remove sub " , String.valueOf(parentLayout.getId()));
 
             if (parentLayout.getChildCount() > 1) {
+
+                //parentLayout is the LinearLayout and we need the tagName of the child
+                String groupTagName = parentLayout.getChildAt(1).getTag().toString();
+
+                //Log.i("remove method", groupTagName);
+
+                if(groupTagName.equalsIgnoreCase(this.tagNameSubExpense)){
+                    this.subExpenseType = null;
+                }
+                else if(groupTagName.equalsIgnoreCase(this.tagNameSubCredit)){
+                    this.subCreditType = null;
+                }
+                else{
+                    Log.i("removeSubRadioGroup", " couldn't determine sub");
+                }
+
                 //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
                 parentLayout.removeViewAt(1);
             }
 
-            //determine which sub type to clear
-            String groupTagName = parentLayout.getTag().toString();
-
-        if(groupTagName.equalsIgnoreCase(this.tagNameSubExpense)){
-            this.subExpenseType = null;
-        }
-        else if(groupTagName.equalsIgnoreCase(this.tagNameSubCredit)){
-            this.subCreditType = null;
-        }
-        else{
-            Log.i("removeSubRadioGroup", " couldn't determine sub");
-        }
     } //end removeRadioGroup
 
 
