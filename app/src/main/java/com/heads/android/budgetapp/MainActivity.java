@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
     //find this using the tags and second radio group - dynamic radio group; don't use on click listener
     protected String subExpenseType = null;
+    protected String creditType = null;
+    protected String subCreditType = null;
 
     // protected RadioGroup dynamicRadioGroup
     private LinearLayout budgetTypeLayout;
@@ -73,8 +75,12 @@ public class MainActivity extends AppCompatActivity {
     private String[] CAR_LIST = {"Car insurance", "Registration", "Fuel", "Maintenance"};
     private String[] HOUSE_LIST = {"Cell Phone", "Cable/Internet", "Electric", "Water/Sewage", "Supplies", "Improvements"};
 
+    //global tag names
     private String tagNameforBudget = "budgetRadioGroup";
     private String tagNameforCredit = "creditRadioGroup";
+    private String tagNameSubExpense = "subExpenseType";
+    private String tagNameSubCredit = "subCreditTYpe";
+
     private final String budgetURLString =
             "https://docs.google.com/forms/d/e/1FAIpQLSdOoM753ZjdJDV050ss21z768qT8i3sHwp7T4iFRt8n4b8h_Q/formResponse";
 
@@ -401,13 +407,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * This method is called for each radio button click of the main expense radio group.
+     * This method is called for each radio button click of the main expense and credit radio groups.
      * This condenses the MainActivity code for having onClickListeners and instantiated objects
      * for each of the radio buttons.
      *
      * @param v - the radio button clicked in the UI
      */
-    public void addDynamicRadios(View v) {
+    public void addSubRadios(View v) {
 
         //get the view clicked id
         int selectedId = v.getId();
@@ -421,36 +427,72 @@ public class MainActivity extends AppCompatActivity {
         Log.i("add dyanmic radio: " , radioSelectedText);
 
         //update the global variable of expense with selection
-        expenseType = radioSelectedText;
-
-        //add tagName to new radiogroup
-        String tagName = "expenseType";
+        //expenseType = radioSelectedText;
 
         //switch case to determine which radio groups to add
         switch (radioSelectedText) {
             case "Entertainment":
                 //add a radio group to the linear layout
-                budgetTypeLayout.addView(createRadioGroup(ENTERTAINMENT_LIST, tagName, budgetTypeLayout));
+                budgetTypeLayout.addView(createRadioGroup(ENTERTAINMENT_LIST, this.tagNameSubExpense, budgetTypeLayout));
                 break;
             case "Daily Living":
-                budgetTypeLayout.addView(createRadioGroup(DAILY_LIVING_LIST, tagName, budgetTypeLayout));
+                budgetTypeLayout.addView(createRadioGroup(DAILY_LIVING_LIST, this.tagNameSubExpense, budgetTypeLayout));
                 break;
             case "Personal":
-                budgetTypeLayout.addView(createRadioGroup(PERSONAL_LIST, tagName, budgetTypeLayout));
+                budgetTypeLayout.addView(createRadioGroup(PERSONAL_LIST, this.tagNameSubExpense, budgetTypeLayout));
                 break;
             case "Health":
-                budgetTypeLayout.addView(createRadioGroup(HEALTH_LIST, tagName, budgetTypeLayout));
+                budgetTypeLayout.addView(createRadioGroup(HEALTH_LIST, this.tagNameSubExpense, budgetTypeLayout));
                 break;
             case "Car":
-                budgetTypeLayout.addView(createRadioGroup(CAR_LIST, tagName, budgetTypeLayout));
+                budgetTypeLayout.addView(createRadioGroup(CAR_LIST, this.tagNameSubExpense, budgetTypeLayout));
                 break;
             case "House":
-                budgetTypeLayout.addView(createRadioGroup(HOUSE_LIST, tagName, budgetTypeLayout));
+                budgetTypeLayout.addView(createRadioGroup(HOUSE_LIST, this.tagNameSubExpense, budgetTypeLayout));
                 break;
             default:
                 Log.e("addDynamicRadios", " invalid case");
         }
     } //end addDynamicRadios
+
+    //this method updates one of the global variables that tracks expense type, subexpense type, credit type, subcredit type
+    public void updateGlobalType(View v){
+        //get the view clicked id
+        int selectedId = v.getId();
+
+        //create a temp view so we can extract the text value of the view selected
+        RadioButton tempView = (RadioButton) findViewById(selectedId);
+
+        String radioSelectedText = tempView.getText().toString();
+        //String radioSelectedText = tempView.getTag().toString();
+
+        //get the parent of the radio button - find it's tagname
+        RadioGroup tempGroup = (RadioGroup) tempView.getParent();
+
+        //get the tagname of the radio group
+        String tagNameGroup = tempGroup.getTag().toString();
+
+        switch (tagNameGroup){
+            case "subExpenseType":
+                //update the global subexpenseType variable
+                this.subExpenseType = radioSelectedText;
+                break;
+            case "subCreditType":
+                this.subCreditType = radioSelectedText;
+                break;
+            case "budgetRadioGroup":
+                this.expenseType = radioSelectedText;
+                break;
+            case"creditRadioGroup":
+                this.creditType = radioSelectedText;
+                break;
+            default:
+                Log.i("error updateGlobal: " , radioSelectedText);
+        }
+
+        Log.i("update variables: " , radioSelectedText);
+    }
+
 
     /**
      * This method dynamically creates a radio group filled with buttons based on the constant String[] passed in
@@ -506,14 +548,28 @@ public class MainActivity extends AppCompatActivity {
             //set the text of the radio button to string array position
             newButton.setText(radiosToCreate[i]);
 
-            //only set on click listener if group is for budget or credit
+            //set on click listener
             if(tagName.equalsIgnoreCase(tagNameforBudget) || tagName.equalsIgnoreCase(tagNameforCredit)) {
-                //set the onclick method
+                //if group is for budget or credit - set onClick to call addSubRadios to the view
                 newButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //call the addDynamicRadios
-                        addDynamicRadios(v);
+                        //update the global variable with selection
+                        updateGlobalType(v);
+                        //add the associated sub radios to the layout view as the second child
+                        addSubRadios(v);
+                    }
+                });
+            }
+            else{
+                //if not budget or credit - then a subtype so update the sub type variable
+                newButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //add the associated sub radios to the layout view as the second child
+                       // addSubRadios(v);
+                        //update the global variable with selection
+                        updateGlobalType(v);
                     }
                 });
             }
@@ -581,9 +637,19 @@ public class MainActivity extends AppCompatActivity {
                 //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
                 parentLayout.removeViewAt(1);
             }
-            //set the subExpenseType to null
-            this.subExpenseType = null;
 
+            //determine which sub type to clear
+            String groupTagName = parentLayout.getTag().toString();
+
+        if(groupTagName.equalsIgnoreCase(this.tagNameSubExpense)){
+            this.subExpenseType = null;
+        }
+        else if(groupTagName.equalsIgnoreCase(this.tagNameSubCredit)){
+            this.subCreditType = null;
+        }
+        else{
+            Log.i("removeSubRadioGroup", " couldn't determine sub");
+        }
     } //end removeRadioGroup
 
 
