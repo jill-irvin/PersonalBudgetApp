@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     // protected RadioGroup dynamicRadioGroup
     private LinearLayout budgetTypeLayout;
+    private LinearLayout creditTypeLayout;
 
     private RadioGroup groupExpenseTypes;
 
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     //global arrays of strings for budget expense types
     private String[] BUDGET_LIST = {"Entertainment", "Daily Living", "Personal", "Car", "Health", "House"};
+
     //global arraylists of strings for expense type sub-types
     private String[] ENTERTAINMENT_LIST = {"Dinners", "Drinks", "Pens/Outings", "Vacations", "Misc"};
     private String[] DAILY_LIVING_LIST = {"Clothes", "Food", "Clean", "Self", "Cats", "Hair", "Edu", "Misc"};
@@ -75,11 +77,18 @@ public class MainActivity extends AppCompatActivity {
     private String[] CAR_LIST = {"Car insurance", "Registration", "Fuel", "Maintenance"};
     private String[] HOUSE_LIST = {"Cell Phone", "Cable/Internet", "Electric", "Water/Sewage", "Supplies", "Improvements"};
 
+    //global arrays of strings for budget expense types
+    private String[] CREDIT_LIST_LH = {"Joint owes Me", "BH owes Me", "I owe BH", "I owe Joint"};
+    private String[] CREDIT_LIST_BH = {"Joint owes Me", "LH owes Me", "Mom owes Me", "Tom owes Me", "I owe LH", "I owe Mom", "I owe Tom", "I owe Joint"};
+
     //global tag names
     private String tagNameforBudget = "budgetRadioGroup";
     private String tagNameforCredit = "creditRadioGroup";
     private String tagNameSubExpense = "subExpenseType";
     private String tagNameSubCredit = "subCreditTYpe";
+
+    //this variable is for device ID to know if it's me or LH for creating credit section as well as entering correct data
+    private String deviceID = "BH";
 
     private final String budgetURLString =
             "https://docs.google.com/forms/d/e/1FAIpQLSdOoM753ZjdJDV050ss21z768qT8i3sHwp7T4iFRt8n4b8h_Q/formResponse";
@@ -96,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         //this is the radio group that changes based on the expense type selected
         this.budgetTypeLayout = (LinearLayout) findViewById(R.id.budgetTypeLayout);
+        this.creditTypeLayout = (LinearLayout) findViewById(R.id.creditTypeLayout);
         //this radio group is for the main expenses
         //this.groupExpenseTypes = (RadioGroup) findViewById(R.id.expenseTypeRadioGroup);
         //create the textview that shows the total amount
@@ -113,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         final Button submit = (Button) findViewById(R.id.buttonSubmit);
         //instantiate checkboxes
         final CheckBox checkBudget = (CheckBox) findViewById(R.id.checkboxBudget);
+        final CheckBox checkCredit = (CheckBox) findViewById(R.id.checkboxJoint);
         //checkBudget.setChecked(true);
 
         //final BudgetAsyncTask task = new BudgetAsyncTask();
@@ -244,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //set onclicklistener for credit checkbox
+        //set onclicklistener for budget checkbox
         checkBudget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -259,43 +270,42 @@ public class MainActivity extends AppCompatActivity {
                     expenseType = null;
                     subExpenseType = null;
 
-                    //update the subexpenses dynamic group radios to be deleted
-                    //removeRadioGroup();
+                    //remove all budget related radios
                     budgetTypeLayout.removeAllViewsInLayout();
 
-                    //clear any selection of a radio button
-                    //groupExpenseTypes.clearCheck();
-
-                    //gray-out expense area with styles
-                    //loop thru radio group and set its children to not be clickable
-                    //for (int i = 0; i < groupExpenseTypes.getChildCount(); i++) {
-                        //get child at i and set its clickable state to false
-                        //groupExpenseTypes.getChildAt(i).setClickable(false);
-                        //groupExpenseTypes.setBackgroundColor(Color.DKGRAY);
-                       // RadioButton temp = (RadioButton) findViewById(groupExpenseTypes.getChildAt(i).getId());
-                        // Log.i("radiobutton", "string color is" + temp.getTextColors().toString());
-                       // temp.setTextColor(Color.parseColor("#d3d3d3"));
-                   // }
-
-                    //make the children
+                    //else, budget selected so make the radios for budget expense type
                 } else {
                     //update global budget boolean to true
                     isBudget = true;
                     budgetTypeLayout.addView(createRadioGroup(BUDGET_LIST, tagNameforBudget, budgetTypeLayout));
-
-                    //make sure clickable
-                    //loop thru radio group and set its children to be clickable
-                   // for (int i = 0; i < groupExpenseTypes.getChildCount(); i++) {
-                        //get child at i and set its clickable state to false
-                       // groupExpenseTypes.getChildAt(i).setClickable(true);
-                        //RadioButton temp = (RadioButton) findViewById(groupExpenseTypes.getChildAt(i).getId());
-                        //temp.setTextColor(Color.DKGRAY);
-                   // }
                 }
             }
         });  //end on click listener for checkBudget checkbox
 
         //set onClickListener for credit checkbox
+        checkCredit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //get the current condition of the checkbox
+                if (!checkCredit.isChecked()) {
+                    //set global of budget boolean to false
+                    isCredit = false;
+
+                    //clear the credit and sub credit type global
+                    creditType = null;
+                    subCreditType = null;
+
+                    //remove all credit related radios
+                    creditTypeLayout.removeAllViewsInLayout();
+
+                } else {
+                    //update global budget boolean to true
+                    isCredit = true;
+                    creditTypeLayout.addView(createRadioGroup(CREDIT_LIST_BH, tagNameforCredit, creditTypeLayout));
+                }
+            }
+        });  //end on click listener for checkCredit checkbox
 
 
     } //end onCreate
