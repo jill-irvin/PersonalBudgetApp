@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] CREDIT_LIST_BH = {"Joint to BH", "LH owes", "Mom owes", "Tom owes", "I owe LH", "I owe Mom", "I owe Tom", "BH to Joint"};
 
     //global arrays of string for credit sub radios BH
-    private String[] LHtoBH_BHLIST = {"Verizon", "Baby Shox", "Big Purchases", "Vacations", "Presents", "Misc", "Checks from LH"};
+    private String[] LHtoBH_BHLIST = {"Verizon", "Baby Shox", "BigPurchases", "Vacation", "Presents", "Misc", "Checks from LH"};
     private String[] MOMoBH_BHLIST = {"Verizon", "Presents", "Misc", "Checks from Mom"};
     private String[] TOMoBH_BHLIST = {"Verizon", "Presents", "Misc", "Checks from Tom"};
     private String[] BHtoMOMTOM_BHLIST = {"Presents", "Dinners", "Misc"};
@@ -87,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
     //global arrays of string for credit sub radios LH
 
     //global arrays of string for credit sub radios combined
-    private String[] JOINTtoBHLH_LIST = {"Grocery", "Dinners/Drinks", "Entertainment", "Vacations", "Cats", "Presents", "Misc"};
-    private String[] BHtoLH_LHtoBH_LIST = {"Big Purchases", "Vacations", "Presents", "Misc"};
+    private String[] JOINTtoBHLH_LIST = {"Grocery", "Dinners/Drinks", "Entertainment", "Vacation", "Cats", "Presents", "Misc"};
+    private String[] BHtoLH_LHtoBH_LIST = {"BigPurchases", "Vacation", "Presents", "Misc"};
     private String[] BHLHtoJOINT_LIST = {"Misc"};
 
     //global tag names
@@ -501,7 +501,6 @@ public class MainActivity extends AppCompatActivity {
                 creditTypeLayout.addView(createRadioGroup(BHLHtoJOINT_LIST , this.tagNameSubExpense, creditTypeLayout));
                 break;
 
-
             default:
                 Log.e("addDynamicRadios", " invalid case");
         }
@@ -602,7 +601,8 @@ public class MainActivity extends AppCompatActivity {
         //temp.setOrientation(LinearLayout.VERTICAL);
         tempRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
 
-        tempRadioGroup.setPadding(0, 15, 0, 15);
+        //left, top, right, bottom
+        tempRadioGroup.setPadding(0, 5, 0, 0);
 
         //create params for the radio button - width, height
         // LinearLayout.LayoutParams tempRadioParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0);
