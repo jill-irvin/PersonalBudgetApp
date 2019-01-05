@@ -44,15 +44,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     //global variable for how much to enter into budget/credit
-    protected int budgetTotal = 0;
-    private int creditTotal = 0;
+    protected int expenseTotal = 0;
 
     //keep track of what's selected
     protected boolean isBudget = true;
     protected boolean isCredit = false;
-    protected String expenseType = null;
 
     //find this using the tags and second radio group - dynamic radio group; don't use on click listener
+    protected String expenseType = null;
     protected String subExpenseType = null;
     protected String creditType = null;
     protected String subCreditType = null;
@@ -62,9 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout creditTypeLayout;
 
     private RadioGroup groupExpenseTypes;
-
     private TextView totalView;
-//adding some comments here
 
     //global arrays of strings for budget expense types
     private String[] BUDGET_LIST = {"Entertainment", "Daily Living", "Personal", "Car", "Health", "House"};
@@ -77,9 +74,22 @@ public class MainActivity extends AppCompatActivity {
     private String[] CAR_LIST = {"Car insurance", "Registration", "Fuel", "Maintenance"};
     private String[] HOUSE_LIST = {"Cell Phone", "Cable/Internet", "Electric", "Water/Sewage", "Supplies", "Improvements"};
 
-    //global arrays of strings for budget expense types
-    private String[] CREDIT_LIST_LH = {"Joint owes Me", "BH owes Me", "I owe BH", "I owe Joint"};
-    private String[] CREDIT_LIST_BH = {"Joint owes Me", "LH owes Me", "Mom owes Me", "Tom owes Me", "I owe LH", "I owe Mom", "I owe Tom", "I owe Joint"};
+    //global arrays of strings for credit expense types
+    private String[] CREDIT_LIST_LH = {"Joint to LH", "BH owes", "I owe BH", "LH to Joint"};
+    private String[] CREDIT_LIST_BH = {"Joint to BH", "LH owes", "Mom owes", "Tom owes", "I owe LH", "I owe Mom", "I owe Tom", "BH to Joint"};
+
+    //global arrays of string for credit sub radios BH
+    private String[] LHtoBH_BHLIST = {"Verizon", "Baby Shox", "Big Purchases", "Vacations", "Presents", "Misc", "Checks from LH"};
+    private String[] MOMoBH_BHLIST = {"Verizon", "Presents", "Misc", "Checks from Mom"};
+    private String[] TOMoBH_BHLIST = {"Verizon", "Presents", "Misc", "Checks from Tom"};
+    private String[] BHtoMOMTOM_BHLIST = {"Presents", "Dinners", "Misc"};
+
+    //global arrays of string for credit sub radios LH
+
+    //global arrays of string for credit sub radios combined
+    private String[] JOINTtoBHLH_LIST = {"Grocery", "Dinners/Drinks", "Entertainment", "Vacations", "Cats", "Presents", "Misc"};
+    private String[] BHtoLH_LHtoBH_LIST = {"Big Purchases", "Vacations", "Presents", "Misc"};
+    private String[] BHLHtoJOINT_LIST = {"Misc"};
 
     //global tag names
     private String tagNameforBudget = "budgetRadioGroup";
@@ -163,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     //check the selections are good
-                    String checkBudgetSelectionsResult = BudgetAppUtils.checkBudgetSelections(budgetTotal, expenseType, budgetTypeLayout);
+                    String checkBudgetSelectionsResult = BudgetAppUtils.checkBudgetSelections(expenseTotal, expenseType, budgetTypeLayout);
 
                     if (checkBudgetSelectionsResult != null) {
                         //update the toast message with returned string
@@ -324,14 +334,14 @@ public class MainActivity extends AppCompatActivity {
         //get the amount clicked
         int selectedAmount = BudgetAppUtils.extractAmount(v);
 
-        //if the value returned is 0 then clear the budgetTotal
+        //if the value returned is 0 then clear the expenseTotal
         if (selectedAmount == 0) {
-            budgetTotal = 0;
+            expenseTotal = 0;
             this.totalView.setText("");
         } else {
-            //update the budgetTotal with selected value
-            budgetTotal = budgetTotal + selectedAmount;
-            this.totalView.setText(String.valueOf(this.budgetTotal));
+            //update the expenseTotal with selected value
+            expenseTotal = expenseTotal + selectedAmount;
+            this.totalView.setText(String.valueOf(this.expenseTotal));
         }
     } //end updateTotalDisplay
 
@@ -407,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
         this.subExpenseType = null;
 
         //clear the totals
-        this.budgetTotal = 0;
+        this.expenseTotal = 0;
 
         this.totalView.setText("");
 
@@ -462,6 +472,36 @@ public class MainActivity extends AppCompatActivity {
             case "House":
                 budgetTypeLayout.addView(createRadioGroup(HOUSE_LIST, this.tagNameSubExpense, budgetTypeLayout));
                 break;
+
+            //cases for credit for BH
+            case "Joint to BH":
+            case "Joint to LH":
+                creditTypeLayout.addView(createRadioGroup(JOINTtoBHLH_LIST, this.tagNameSubExpense, creditTypeLayout));
+                break;
+            case "LH owes":
+                creditTypeLayout.addView(createRadioGroup(LHtoBH_BHLIST, this.tagNameSubExpense, creditTypeLayout));
+                break;
+            case "Mom owes":
+                creditTypeLayout.addView(createRadioGroup(MOMoBH_BHLIST, this.tagNameSubExpense, creditTypeLayout));
+                break;
+            case "Tom owes":
+                creditTypeLayout.addView(createRadioGroup(TOMoBH_BHLIST, this.tagNameSubExpense, creditTypeLayout));
+                break;
+            case "I owe LH":
+            case "I owe BH":
+            case "BH owes":
+                creditTypeLayout.addView(createRadioGroup(BHtoLH_LHtoBH_LIST, this.tagNameSubExpense, creditTypeLayout));
+                break;
+            case "I owe Mom":
+            case "I owe Tom":
+                creditTypeLayout.addView(createRadioGroup(BHtoMOMTOM_BHLIST, this.tagNameSubExpense, creditTypeLayout));
+                break;
+            case "BH to Joint":
+            case "LH to Joint":
+                creditTypeLayout.addView(createRadioGroup(BHLHtoJOINT_LIST , this.tagNameSubExpense, creditTypeLayout));
+                break;
+
+
             default:
                 Log.e("addDynamicRadios", " invalid case");
         }
@@ -488,7 +528,7 @@ public class MainActivity extends AppCompatActivity {
             this.expenseType = radioSelectedText;
             Log.i("update global : " , radioSelectedText);
         }
-        else if(tagNameGroup.equalsIgnoreCase(this.tagNameSubCredit)){
+        else if(tagNameGroup.equalsIgnoreCase(this.tagNameforCredit)){
             this.creditType = radioSelectedText;
             Log.i("update global : " , radioSelectedText);
         }
