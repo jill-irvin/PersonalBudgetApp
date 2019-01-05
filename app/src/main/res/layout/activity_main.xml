@@ -169,7 +169,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Expense Type"
+            android:text="Budget"
             android:paddingBottom="5dp"
             />
 
@@ -259,13 +259,18 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-
             android:background="@android:color/darker_gray"></View>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="IOU"
+            android:paddingBottom="5dp"
+            />
         <LinearLayout
             android:id="@+id/creditTypeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
             android:orientation="vertical">
         </LinearLayout>
 

@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] CREDIT_LIST_BH = {"Joint to BH", "LH owes", "Mom owes", "Tom owes", "I owe LH", "I owe Mom", "I owe Tom", "BH to Joint"};
 
     //global arrays of string for credit sub radios BH
-    private String[] LHtoBH_BHLIST = {"Verizon", "Baby Shox", "BigPurchases", "Vacation", "Presents", "Misc", "Checks from LH"};
+    private String[] LHtoBH_BHLIST = {"Verizon", "BigPurchases", "Presents", "Baby Shox", "Vacation", "Misc", "Checks from LH"};
     private String[] MOMoBH_BHLIST = {"Verizon", "Presents", "Misc", "Checks from Mom"};
     private String[] TOMoBH_BHLIST = {"Verizon", "Presents", "Misc", "Checks from Tom"};
     private String[] BHtoMOMTOM_BHLIST = {"Presents", "Dinners", "Misc"};
@@ -602,11 +602,13 @@ public class MainActivity extends AppCompatActivity {
         tempRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
 
         //left, top, right, bottom
-        tempRadioGroup.setPadding(0, 5, 0, 0);
+        tempRadioGroup.setPadding(0, 10, 0, 0);
 
         //create params for the radio button - width, height
         // LinearLayout.LayoutParams tempRadioParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0);
         LinearLayout.LayoutParams tempRadioParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
+        //LinearLayout.LayoutParams tempRadioParams = new LinearLayout.LayoutParams(0, 0);
+
         //evenly space the radios
         tempRadioParams.weight = 1;
 
