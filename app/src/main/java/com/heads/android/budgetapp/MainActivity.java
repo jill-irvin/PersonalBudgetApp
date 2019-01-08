@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup groupExpenseTypes;
     private TextView totalView;
 
+    /** TextView that is displayed when there is no internet connection*/
+    private TextView mNoInternetTextView;
+
     //global arrays of strings for budget expense types
     private String[] BUDGET_LIST = {"Entertainment", "Daily Living", "Personal", "Car", "Health", "House"};
 
@@ -109,6 +112,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //textview that takes over screen if no internet
+        this.mNoInternetTextView = (TextView) findViewById(R.id.empty_view);
+        //mNoInternetTextView.setText("Checking internet connection...");
+
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.main_layout);
+
+        //first check that there is internet connection before submitting
+        //Get a reference to the ConnectivityManager to check state of network connectivity
+        ConnectivityManager connMgr = (ConnectivityManager)
+        getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        // If there is a network connection, then proceed, else show toast and don't submit
+       // if (networkInfo != null && networkInfo.isConnected()) {
+        if (networkInfo == null || !(networkInfo.isConnected())) {
+            //Log.i("onCreate", "no internet connection");
+
+                // Update empty state with no connection error message
+                mNoInternetTextView.setText(R.string.no_internet_connection);
+
+                //delete all views in main linear layout
+                mainLayout.setVisibility(View.GONE);
+
+                //make the textview gone
+                //mNoInternetTextView.setVisibility(View.GONE);
+            }
+
+
+
+
 
         //set the app to only be in portrait orientation (could add to manifest file)
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

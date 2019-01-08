@@ -17,4 +17,6 @@
 
     </string-array>
 
+    <string name="no_internet_connection">No internet connection. Turn-on data or wifi then reload the app.</string>
+
 </resources>
