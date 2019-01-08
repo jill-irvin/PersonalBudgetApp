@@ -142,10 +142,6 @@ public class MainActivity extends AppCompatActivity {
                 //mNoInternetTextView.setVisibility(View.GONE);
             }
 
-
-
-
-
         //set the app to only be in portrait orientation (could add to manifest file)
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -194,15 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 //Log.i("isBudget value: " , String.valueOf(isBudget));
 
                 //first check that there is internet connection before submitting
-                //Get a reference to the ConnectivityManager to check state of network connectivity
-                ConnectivityManager connMgr = (ConnectivityManager)
-                        getSystemService(Context.CONNECTIVITY_SERVICE);
-
-                // Get details on the currently active default data network
-                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-
-                // If there is a network connection, then proceed, else show toast and don't submit
-                if (networkInfo != null && networkInfo.isConnected()) {
+                
 
                     //check that subExpense has been selected
                     //get the second child of the dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
@@ -258,16 +246,6 @@ public class MainActivity extends AppCompatActivity {
                         //now execute the async task
                         task.execute(budgetURLString);
                     }
-
-                } //end check for internet connection
-                else {
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "No internet connection - cannot send data.",
-                            Toast.LENGTH_LONG);
-                    toast.show();
-                }
-
-
 
                 /*
                 //if budget is checked then get the expense, group expense, and subexpense
