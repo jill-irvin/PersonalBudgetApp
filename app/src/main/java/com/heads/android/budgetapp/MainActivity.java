@@ -106,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
     private final String budgetURLString =
             "https://docs.google.com/forms/d/e/1FAIpQLSdOoM753ZjdJDV050ss21z768qT8i3sHwp7T4iFRt8n4b8h_Q/formResponse";
 
-
+    //https://docs.google.com/forms/d/17QUlqHXI7tf-9wxXWlLG6jxq3U_OvQ1UegYLzfexZBs/edit
+    //https://docs.google.com/forms/d/e/1FAIpQLSdOoM753ZjdJDV050ss21z768qT8i3sHwp7T4iFRt8n4b8h_Q/viewform
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -33,6 +33,10 @@ public class BudgetAppUtils {
         //no object to be instantiated from this lcass
     }
 
+    /**
+     * This method maps the categories and subcategories of either credit or budget to a key entry.
+     * It returns String result of that entry     *
+     */
 
     /**
      * A method that the submit click calls to make sure the user has inputs to all fields
