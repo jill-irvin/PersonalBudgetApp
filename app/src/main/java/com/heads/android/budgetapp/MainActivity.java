@@ -142,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
                 //mNoInternetTextView.setVisibility(View.GONE);
             }
 
+        //should i put the rest below into an else statement?
+
+
         //set the app to only be in portrait orientation (could add to manifest file)
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -190,7 +193,33 @@ public class MainActivity extends AppCompatActivity {
                 //Log.i("isBudget value: " , String.valueOf(isBudget));
 
                 //first check that there is internet connection before submitting
-                
+                //this is now done in onCreate and won't load rest of app if there's isn't internet
+
+                //if budget checked -> create budget object
+
+                //if credit checked -> create credit object
+
+                //verify expense objects have no null fields
+                //if no, then submit, if yes, then toast of string result
+
+                //check that money field filled-in
+                if(expenseTotal == 0){
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Enter an amount.",
+                            Toast.LENGTH_LONG);
+                    toast.show();
+                }
+
+                //see if isBudget is selected for its checks
+                else if(isBudget){
+
+
+                }
+
+                //check that if budget selected that 2 radios are selected
+
+                //check that if credit selected that 2 radios are selected
+
 
                     //check that subExpense has been selected
                     //get the second child of the dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
