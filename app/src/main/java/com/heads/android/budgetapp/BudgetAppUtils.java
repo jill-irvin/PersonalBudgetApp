@@ -157,6 +157,12 @@ public class BudgetAppUtils {
             urlConnection.setConnectTimeout(15000 /* milliseconds */);
             urlConnection.setRequestMethod("POST");
 
+            //loop thru entry and write each entry with associated value
+            //entry is matrix? first row - first element
+            //write one long line of data with entry and value?
+
+            //can i make data an array of data?
+
             //switch statement to determine entry to update in budget sheet
             String data = URLEncoder.encode("entry.709390653", "UTF-8")
                     + "=" + URLEncoder.encode("120", "UTF-8");
@@ -164,6 +170,7 @@ public class BudgetAppUtils {
             urlConnection.connect();
 
             OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
+            //write with data array?
             wr.write(data);
             wr.flush();
 
