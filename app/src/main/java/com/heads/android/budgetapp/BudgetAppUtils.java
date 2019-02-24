@@ -20,6 +20,11 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 
 /**
  * A class to store helper methods for the budget app
@@ -40,20 +45,34 @@ public class BudgetAppUtils {
 
     /**
      * A method that the submit click calls to make sure the user has inputs to all fields
-     * @param dynamicRadioLayout - make sure that one has been selected
+     * @param  - make sure that one has been selected
      * @return result - to either update the toast message or proceed with data input (null means proceed)
+     * expenseTotal, isBudget, isCredit, expenseType, subExpenseType, creditType, subCreditType
      */
-    public static String checkBudgetSelections(int amount, String expenseType, LinearLayout dynamicRadioLayout){
-        String result = null;
+    public static String checkExpenseSelections(int expenseTotal, boolean isBudget, boolean isCredit, String expenseType, String subExpenseType, String creditType, String subCreditType){
+        String result = "";
 
         //check protected variables from MainActivity as well as the passed in argument
-        if(amount == 0)
+        if(expenseTotal == 0)
             result = "Enter an amount.";
-        else if(expenseType == null)
-            result = "You need to select an expense type";
+
+        if(isBudget){
+            if(expenseType == null || subExpenseType == null){
+                result = result + "\n Enter all fields for Budget expense.";
+            }
+        }
+
+        if(isCredit){
+            if(creditType == null || subCreditType == null){
+                result = result + "\n Enter all fields for Credit expense.";
+            }
+        }
+        //else if(expenseType == null)
+           // result = "You need to select an expense type";
        // else if(subExpenseTypeSelected == 1)
             //result =  "You need to select a sub expense";
-        else{
+       // else{
+            /*
             //check that subExpense has been selected
             //get the second child of the dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
             Log.i("passed in: ", " int " + dynamicRadioLayout.getChildCount());
@@ -64,7 +83,9 @@ public class BudgetAppUtils {
             if(subExpenseTypeSelected == -1) {
                 result = "You need to select a sub expense";
             }
-        }
+
+            */
+      //  }
 
         return result;
     }
@@ -102,11 +123,34 @@ public class BudgetAppUtils {
     public static String submitBudgetData(String requestUrl) {
         // Create URL object
         URL url = createUrl(requestUrl);
+        Log.i("in submit budget data", null);
+
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(url);
+
+            /*
+            OkHttpClient client = new OkHttpClient();
+            FormBody body = new FormBody.Builder()
+                    .add( "entry.709390653", "test" )
+                    .add( "entry.2064562737", "Option 1" )
+                    .build();
+            Request request = new Request.Builder()
+                    .url( requestUrl )
+                    .post( body )
+                    .build();
+            Response response = client.newCall( request ).execute();
+            System.out.println( response.isSuccessful() );
+
+            Log.i("successful send", null);
+            */
+            //String data = URLEncoder.encode("entry.709390653", "UTF-8")
+            //  + "=" + URLEncoder.encode("120", "UTF-8");
+          //  String data = URLEncoder.encode("entry.2064562737", "UTF-8")
+            //        + "=" + URLEncoder.encode(" Option 1", "UTF-8");
+
         } catch (IOException e) {
             Log.e("Submit: ", "Error closing input stream", e);
         }
@@ -165,7 +209,10 @@ public class BudgetAppUtils {
 
             //switch statement to determine entry to update in budget sheet
             String data = URLEncoder.encode("entry.709390653", "UTF-8")
-                    + "=" + URLEncoder.encode("120", "UTF-8");
+                  + "=" + URLEncoder.encode("120", "UTF-8");
+           // String data = URLEncoder.encode("entry.2064562737", "UTF-8")
+               //     + "=" + URLEncoder.encode(" Option 1", "UTF-8");
+
 
             urlConnection.connect();
 

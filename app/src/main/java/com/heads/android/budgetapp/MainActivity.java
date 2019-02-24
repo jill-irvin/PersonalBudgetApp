@@ -54,11 +54,13 @@ public class MainActivity extends AppCompatActivity {
     protected String expenseType = null;
     protected String subExpenseType = null;
     protected String creditType = null;
-    protected String subCreditType = null;
+    protected String subCreditType = "test";
 
     // protected RadioGroup dynamicRadioGroup
     private LinearLayout budgetTypeLayout;
     private LinearLayout creditTypeLayout;
+
+    private Spinner monthSpinner;
 
     private RadioGroup groupExpenseTypes;
     private TextView totalView;
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     private String tagNameforBudget = "budgetRadioGroup";
     private String tagNameforCredit = "creditRadioGroup";
     private String tagNameSubExpense = "subExpenseType";
-    private String tagNameSubCredit = "subCreditTYpe";
+    private String tagNameSubCredit = "subCreditType";
 
     //this variable is for device ID to know if it's me or LH for creating credit section as well as entering correct data
     private String deviceID = "BH";
@@ -180,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
         //setup the spinner
         //java object for the xml spinner
-        final Spinner monthSpinner = (Spinner) findViewById(R.id.month_spinner);
+        monthSpinner = (Spinner) findViewById(R.id.month_spinner);
 
         //determine the current month and set the month spinner to it
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
@@ -190,12 +192,9 @@ public class MainActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Log.i("submit pressed: ", "yes");
                 //Log.i("isBudget value: " , String.valueOf(isBudget));
-
-                //first check that there is internet connection before submitting
-                //this is now done in onCreate and won't load rest of app if there's isn't internet
-
                 //if budget checked -> create budget object
 
                 //if credit checked -> create credit object
@@ -203,78 +202,62 @@ public class MainActivity extends AppCompatActivity {
                 //verify expense objects have no null fields
                 //if no, then submit, if yes, then toast of string result
 
-                //check that money field filled-in
-                if(expenseTotal == 0){
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Enter an amount.",
-                            Toast.LENGTH_LONG);
-                    toast.show();
-                }
+                //if budget is selected, then run checkExpenseSelections for budget
+                //if not null, then return string, else create budget object
 
-                //see if isBudget is selected for its checks
-                else if(isBudget){
+                //check the selections are good
+               String checkSelectionsResult = BudgetAppUtils.checkExpenseSelections(expenseTotal, isBudget, isCredit, expenseType, subExpenseType, creditType, subCreditType);
 
-
-                }
-
-                //check that if budget selected that 2 radios are selected
-
-                //check that if credit selected that 2 radios are selected
-
-
-                    //check that subExpense has been selected
-                    //get the second child of the dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
-
-
-                    //check the selections are good
-                    String checkBudgetSelectionsResult = BudgetAppUtils.checkBudgetSelections(expenseTotal, expenseType, budgetTypeLayout);
-
-                    if (checkBudgetSelectionsResult != null) {
-                        //update the toast message with returned string
+                if (checkSelectionsResult != null) {
+                   //update the toast message with returned string
                         Toast toast = Toast.makeText(getApplicationContext(),
-                                checkBudgetSelectionsResult,
+                                checkSelectionsResult,
                                 Toast.LENGTH_LONG);
                         toast.show();
                     } else {
+                        boolean submitBudget = false;
+                        boolean submitCredit = false;
                         //proceed to send data
+                        //decide if making budget or credit or both expense type
+                        if(isBudget){
+                            //String deviceId, String month, String amount, String category, String subCategory
+                            Expense budgetEntry = new BudgetExpense(monthSpinner.getSelectedItem().toString(), String.valueOf(expenseTotal), expenseType, subExpenseType);
+                            submitBudget = true;
+                        }
+                        if(isCredit){
+                            //String deviceId, String month, String amount, String category, String subCategory
+                            Expense creditEntry = new CreditExpense(deviceID, monthSpinner.getSelectedItem().toString(), String.valueOf(expenseTotal),creditType, subCreditType);
+                            submitCredit = true;
+                        }
 
-                        //***instead of instantiating objects - what if just get position selected of radio groups
-                        //***and then use that index in the constant string arrays used to populate those radio groups
-                        //can't b/c would have to do switch of expense type selected to determine which array to use for indexing
+                        BudgetAsyncTask task = new BudgetAsyncTask();
 
-                        //expense type global variable is updated when created the subexpenses and cleared elsewhere so
-                        //don't need to extract from radio group
-                        //however, subexpense type doesn't have an onclick listeners to update who was selected
+                        if(submitBudget && submitCredit){
+                            Log.i("budget & credit: " , "both");
+                            // task.execute(budgetEntry, creditEntry);
+                        }
+                        else if(submitBudget){
+                            Log.i("budget & credit: " , "budget");
+                            // task.execute(budgetEntry);
+                        }
+                        else if(submitCredit){
+                            // task.execute(creditEntry);
+                            Log.i("budget & credit: " , "credit");
+                        }
+                        else{
+                            //error
+                            Log.i("budget & credit: " , "error");
+                        }
 
-                        Log.i("expense type is", " " + expenseType);
 
-                       // dynamicRadioLayout.getChildAt(1).
-                        RadioGroup tempsubExpenseGroup = (RadioGroup) budgetTypeLayout.getChildAt(1);
 
-                        int subExpenseTypeSelected = tempsubExpenseGroup.getCheckedRadioButtonId();
-                        //store checkradio button id into a view
-                        View subSelectedRadio = tempsubExpenseGroup.findViewById(subExpenseTypeSelected);
-
-                        //get the index of that view relative to the group it's in
-                        int subRadioID = tempsubExpenseGroup.indexOfChild(subSelectedRadio);
-
-                        //create a temp button of taht subRadioID
-                        RadioButton btnTempSelected = (RadioButton) tempsubExpenseGroup.getChildAt(subRadioID);
-
-                        //now get the text
-                        subExpenseType = (String) btnTempSelected.getText();
-                        Log.i("subExpenseType", subExpenseType);
-
-                        //get the text of the month spinner
-                        String month = (String) monthSpinner.getSelectedItem();
-                        Log.i("month: ", month);
 
                         //execute for budget then another for credit? - or pass in 2 urls - one for budget one for credit?
                         //var args should know what to do - but need to update to loop the number of args
 
-                        BudgetAsyncTask task = new BudgetAsyncTask();
+                      //  BudgetAsyncTask task = new BudgetAsyncTask();
                         //now execute the async task
-                        task.execute(budgetURLString);
+                       task.execute(budgetURLString);
                     }
 
                 /*
@@ -520,29 +503,29 @@ public class MainActivity extends AppCompatActivity {
             //cases for credit for BH
             case "Joint to BH":
             case "Joint to LH":
-                creditTypeLayout.addView(createRadioGroup(JOINTtoBHLH_LIST, this.tagNameSubExpense, creditTypeLayout));
+                creditTypeLayout.addView(createRadioGroup(JOINTtoBHLH_LIST, this.tagNameSubCredit, creditTypeLayout));
                 break;
             case "LH owes":
-                creditTypeLayout.addView(createRadioGroup(LHtoBH_BHLIST, this.tagNameSubExpense, creditTypeLayout));
+                creditTypeLayout.addView(createRadioGroup(LHtoBH_BHLIST, this.tagNameSubCredit, creditTypeLayout));
                 break;
             case "Mom owes":
-                creditTypeLayout.addView(createRadioGroup(MOMoBH_BHLIST, this.tagNameSubExpense, creditTypeLayout));
+                creditTypeLayout.addView(createRadioGroup(MOMoBH_BHLIST, this.tagNameSubCredit, creditTypeLayout));
                 break;
             case "Tom owes":
-                creditTypeLayout.addView(createRadioGroup(TOMoBH_BHLIST, this.tagNameSubExpense, creditTypeLayout));
+                creditTypeLayout.addView(createRadioGroup(TOMoBH_BHLIST, this.tagNameSubCredit, creditTypeLayout));
                 break;
             case "I owe LH":
             case "I owe BH":
             case "BH owes":
-                creditTypeLayout.addView(createRadioGroup(BHtoLH_LHtoBH_LIST, this.tagNameSubExpense, creditTypeLayout));
+                creditTypeLayout.addView(createRadioGroup(BHtoLH_LHtoBH_LIST, this.tagNameSubCredit, creditTypeLayout));
                 break;
             case "I owe Mom":
             case "I owe Tom":
-                creditTypeLayout.addView(createRadioGroup(BHtoMOMTOM_BHLIST, this.tagNameSubExpense, creditTypeLayout));
+                creditTypeLayout.addView(createRadioGroup(BHtoMOMTOM_BHLIST, this.tagNameSubCredit, creditTypeLayout));
                 break;
             case "BH to Joint":
             case "LH to Joint":
-                creditTypeLayout.addView(createRadioGroup(BHLHtoJOINT_LIST , this.tagNameSubExpense, creditTypeLayout));
+                creditTypeLayout.addView(createRadioGroup(BHLHtoJOINT_LIST , this.tagNameSubCredit, creditTypeLayout));
                 break;
 
             default:
@@ -566,6 +549,8 @@ public class MainActivity extends AppCompatActivity {
 
         //get the tagname of the radio group
         String tagNameGroup = tempGroup.getTag().toString();
+
+        Log.i("tagNameGroup is" , tagNameGroup);
 
         if(tagNameGroup.equalsIgnoreCase(this.tagNameforBudget)){
             this.expenseType = radioSelectedText;

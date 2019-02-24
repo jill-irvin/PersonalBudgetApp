@@ -14,7 +14,7 @@ public class BudgetExpense extends Expense {
 
     String urlBudget= "https://docs.google.com/forms/d/e/1FAIpQLSdhsBfFRvUNjc6XyQYSmQEYa2wXAtmiuLUm0q8lpOvDvdSUEQ/formResponse";
 
-    public BudgetExpense(String deviceId, String month, String amount, String category, String subCategory) {
+    public BudgetExpense(String month, String amount, String category, String subCategory) {
         super(month, amount, category, subCategory);
         super.setUrl(urlBudget);
     }
