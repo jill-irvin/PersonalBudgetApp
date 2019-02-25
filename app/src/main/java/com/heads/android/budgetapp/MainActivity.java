@@ -65,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup groupExpenseTypes;
     private TextView totalView;
 
+    private CheckBox checkBudget;
+    private CheckBox checkCredit;
+
     /** TextView that is displayed when there is no internet connection*/
     private TextView mNoInternetTextView;
 
@@ -170,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
         //instantiate submit button
         final Button submit = (Button) findViewById(R.id.buttonSubmit);
         //instantiate checkboxes
-        final CheckBox checkBudget = (CheckBox) findViewById(R.id.checkboxBudget);
-        final CheckBox checkCredit = (CheckBox) findViewById(R.id.checkboxJoint);
+        checkBudget = (CheckBox) findViewById(R.id.checkboxBudget);
+        checkCredit = (CheckBox) findViewById(R.id.checkboxJoint);
         //checkBudget.setChecked(true);
 
         //final BudgetAsyncTask task = new BudgetAsyncTask();
@@ -239,6 +242,9 @@ public class MainActivity extends AppCompatActivity {
                         if(submitBudget && submitCredit){
                             Log.i("budget & credit: " , "both");
                             // task.execute(budgetEntry, creditEntry);
+                            BudgetAsyncTask task = new BudgetAsyncTask();
+
+                            task.execute(budgetURLString);
                         }
                         else if(submitBudget){
                             Log.i("budget & credit: " , "budget");
@@ -252,6 +258,9 @@ public class MainActivity extends AppCompatActivity {
                         else if(submitCredit){
                             // task.execute(creditEntry);
                             Log.i("budget & credit: " , "credit");
+                            BudgetAsyncTask task = new BudgetAsyncTask();
+
+                            task.execute(budgetURLString);
                         }
                         else{
                             //error
@@ -464,6 +473,20 @@ public class MainActivity extends AppCompatActivity {
 
         this.totalView.setText("");
 
+        //un-select the budget and credit checkboxes
+        //remove all budget related radios
+        if(this.isBudget){
+            budgetTypeLayout.removeAllViewsInLayout();
+            this.isBudget = false;
+            checkBudget.setChecked(false);
+        }
+
+        if(this.isCredit){
+            //remove all credit related radios
+            creditTypeLayout.removeAllViewsInLayout();
+            this.isCredit = false;
+            checkCredit.setChecked(false);
+        }
         //clear any selection of a radio button
         //groupExpenseTypes.clearCheck();
 
