@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     protected String expenseType = null;
     protected String subExpenseType = null;
     protected String creditType = null;
-    protected String subCreditType = "test";
+    protected String subCreditType = null;
 
     // protected RadioGroup dynamicRadioGroup
     private LinearLayout budgetTypeLayout;
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //check the selections are good
                String checkSelectionsResult = BudgetAppUtils.checkExpenseSelections(expenseTotal, isBudget, isCredit, expenseType, subExpenseType, creditType, subCreditType);
-
+                //Log.i("checkSelection: ", checkSelectionsResult);
                 if (checkSelectionsResult != null) {
                    //update the toast message with returned string
                         Toast toast = Toast.makeText(getApplicationContext(),
@@ -220,17 +220,21 @@ public class MainActivity extends AppCompatActivity {
                         //proceed to send data
                         //decide if making budget or credit or both expense type
                         if(isBudget){
+                            Log.i("submit : " , "budget object");
                             //String deviceId, String month, String amount, String category, String subCategory
+                           // String test = monthSpinner.getSelectedItem().toString();
+                          //  Log.i("submit : " , test);
                             Expense budgetEntry = new BudgetExpense(monthSpinner.getSelectedItem().toString(), String.valueOf(expenseTotal), expenseType, subExpenseType);
                             submitBudget = true;
                         }
                         if(isCredit){
+                            Log.i("submit : " , "credit object");
                             //String deviceId, String month, String amount, String category, String subCategory
                             Expense creditEntry = new CreditExpense(deviceID, monthSpinner.getSelectedItem().toString(), String.valueOf(expenseTotal),creditType, subCreditType);
                             submitCredit = true;
                         }
 
-                        BudgetAsyncTask task = new BudgetAsyncTask();
+
 
                         if(submitBudget && submitCredit){
                             Log.i("budget & credit: " , "both");
@@ -239,6 +243,11 @@ public class MainActivity extends AppCompatActivity {
                         else if(submitBudget){
                             Log.i("budget & credit: " , "budget");
                             // task.execute(budgetEntry);
+
+                            Log.i("about to create task" , "test");
+                            BudgetAsyncTask task = new BudgetAsyncTask();
+                            Log.i("created async task" , "test");
+                            task.execute(budgetURLString);
                         }
                         else if(submitCredit){
                             // task.execute(creditEntry);
@@ -247,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
                         else{
                             //error
                             Log.i("budget & credit: " , "error");
+
                         }
 
 
@@ -257,8 +267,8 @@ public class MainActivity extends AppCompatActivity {
 
                       //  BudgetAsyncTask task = new BudgetAsyncTask();
                         //now execute the async task
-                       task.execute(budgetURLString);
-                    }
+
+                    }  //end else to submit data
 
                 /*
                 //if budget is checked then get the expense, group expense, and subexpense
@@ -376,7 +386,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * {@link AsyncTask} to perform the network request on a background thread
      */
-    private class BudgetAsyncTask extends AsyncTask<String, Void, String> {
+    //private class BudgetAsyncTask extends AsyncTask<String, Void, String> {
+    private class BudgetAsyncTask extends AsyncTask<String, Void, Boolean> {
         /**
          * This method is invoked on a background thread, so we can perform long-running
          * operations like making a network request.
@@ -388,15 +399,17 @@ public class MainActivity extends AppCompatActivity {
          * @return
          */
         @Override
-        protected String doInBackground(String... urls) {
+        protected Boolean doInBackground(String... urls) {
+        //protected String doInBackground(String... urls) {
 
             //don't perform the request if there are no URLs, or the first URL is null
             if (urls.length < 1 || urls[0] == null) {
                 return null;
             }
-
+            Log.i("in do in background" , " - calling submit budget data");
             // Perform the HTTP request for earthquake data and process the response.
-            String result = BudgetAppUtils.submitBudgetData(urls[0]);
+            //String result = BudgetAppUtils.submitBudgetData(urls[0]);
+            Boolean result = BudgetAppUtils.submitBudgetData(urls[0]);
             return result;
         }
 
@@ -410,24 +423,27 @@ public class MainActivity extends AppCompatActivity {
          * @param result
          */
         @Override
-        protected void onPostExecute(String result) {
+        //protected void onPostExecute(String result) {
+        protected void onPostExecute(Boolean result) {
 
             //if there is no result from doInBackground, do nothing
-            if (result == null) {
+            //if (result == null) {
+            if (!result) {
                 Toast toast = Toast.makeText(getApplicationContext(),
                         "Data was not sent",
                         Toast.LENGTH_SHORT);
 
                 toast.show();
                 return;
-            }
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "Data sent!",
-                    Toast.LENGTH_SHORT);
-            toast.show();
+            }else {
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Data sent!",
+                        Toast.LENGTH_SHORT);
+                toast.show();
 
-            //clear UI
-            clearUI();
+                //clear UI
+                clearUI();
+            }
             // Update the information displayed to the user.
             //updateUi(earthquake);
         }

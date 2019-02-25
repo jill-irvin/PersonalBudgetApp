@@ -50,21 +50,21 @@ public class BudgetAppUtils {
      * expenseTotal, isBudget, isCredit, expenseType, subExpenseType, creditType, subCreditType
      */
     public static String checkExpenseSelections(int expenseTotal, boolean isBudget, boolean isCredit, String expenseType, String subExpenseType, String creditType, String subCreditType){
-        String result = "";
-
+        String result = null;
+        Log.i("expense total is: ", String.valueOf(expenseTotal));
         //check protected variables from MainActivity as well as the passed in argument
         if(expenseTotal == 0)
             result = "Enter an amount.";
 
-        if(isBudget){
+        else if(isBudget){
             if(expenseType == null || subExpenseType == null){
-                result = result + "\n Enter all fields for Budget expense.";
+                result = "Enter all fields for Budget expense.";
             }
         }
 
-        if(isCredit){
+       else if(isCredit){
             if(creditType == null || subCreditType == null){
-                result = result + "\n Enter all fields for Credit expense.";
+                result = "Enter all fields for Credit expense.";
             }
         }
         //else if(expenseType == null)
@@ -120,38 +120,42 @@ public class BudgetAppUtils {
     /**
      * Send data to the budget sheet and return the result.
      */
-    public static String submitBudgetData(String requestUrl) {
+    //public static String submitBudgetData(String requestUrl) {
+    public static Boolean submitBudgetData(String requestUrl) {
         // Create URL object
         URL url = createUrl(requestUrl);
-        Log.i("in submit budget data", null);
+      //  Log.i("in submit budget data", null);
 
 
         // Perform HTTP request to the URL and receive a JSON response back
-        String jsonResponse = null;
+        //String jsonResponse = null;
+        Boolean jsonResponse = false;
+      // String response = null;
         try {
-            jsonResponse = makeHttpRequest(url);
+            //jsonResponse = makeHttpRequest(url);
 
-            /*
+
             OkHttpClient client = new OkHttpClient();
             FormBody body = new FormBody.Builder()
                     .add( "entry.709390653", "test" )
                     .add( "entry.2064562737", "Option 1" )
                     .build();
             Request request = new Request.Builder()
-                    .url( requestUrl )
+                    .url( url )
                     .post( body )
                     .build();
-            Response response = client.newCall( request ).execute();
-            System.out.println( response.isSuccessful() );
+          //  Response response = client.newCall( request ).execute();
+           // System.out.println( response.isSuccessful() );
 
-            Log.i("successful send", null);
-            */
-            //String data = URLEncoder.encode("entry.709390653", "UTF-8")
+           // Log.i("successful send", null);
+
+          //  String data = URLEncoder.encode("entry.709390653", "UTF-8")
             //  + "=" + URLEncoder.encode("120", "UTF-8");
           //  String data = URLEncoder.encode("entry.2064562737", "UTF-8")
             //        + "=" + URLEncoder.encode(" Option 1", "UTF-8");
-
-        } catch (IOException e) {
+            Response response = client.newCall(request).execute();
+            jsonResponse = response.isSuccessful();
+        } catch (Exception e) {
             Log.e("Submit: ", "Error closing input stream", e);
         }
 
@@ -160,6 +164,7 @@ public class BudgetAppUtils {
 
         // Return the {@link Event}
         return jsonResponse;
+       // return response;
     } //end submitBudgetData
 
 
@@ -210,8 +215,8 @@ public class BudgetAppUtils {
             //switch statement to determine entry to update in budget sheet
             String data = URLEncoder.encode("entry.709390653", "UTF-8")
                   + "=" + URLEncoder.encode("120", "UTF-8");
-           // String data = URLEncoder.encode("entry.2064562737", "UTF-8")
-               //     + "=" + URLEncoder.encode(" Option 1", "UTF-8");
+            //String data = URLEncoder.encode("entry.2064562737", "UTF-8")
+              //      + "=" + URLEncoder.encode("Option 1", "UTF-8");
 
 
             urlConnection.connect();
