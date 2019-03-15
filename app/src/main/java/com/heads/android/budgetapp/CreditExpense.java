@@ -7,6 +7,9 @@ package com.heads.android.budgetapp;
 public class CreditExpense extends Expense {
 
     private String mDeviceId;
+    private String deviceID_BH = "dc176faff8b524ce";
+    private String deviceID_LH = "test";
+
     private String mCategory;  //who owes who
     private String mSubCategory;  //what type of expense does who owe
 
@@ -46,18 +49,18 @@ public class CreditExpense extends Expense {
     private String[] entriesBH;
 
     public CreditExpense(String deviceId, String month, String amount, String category, String subCategory){
-        super(month, amount, category, subCategory);
-        this.mDeviceId = deviceId;
-
+        super(month, amount, category, subCategory, "Credit");
+        //this.mDeviceId = deviceId;
+        this.mDeviceId = deviceID_BH;
         //use this method to call super seturl with correct url
         this.setUrlByDeviceId();
 
-        /*set all the super's entry fields as well
+        //set all the super's entry fields as well
         super.setEntryMonth(this.entryMonth);
         super.setEntryCost(this.entryCost);
         super.setEntryCategory(this.entryCategory);
         super.setEntrySubCategory(this.entrySubCategory);
-*/
+
         //now with deviceID, create entry variables and url? or create hashmap of entries to their values
         //call super to set the url
 
@@ -67,7 +70,7 @@ public class CreditExpense extends Expense {
     //this method is used to determine which phone made entry request - and populates the
     //expense object with the correct entry names (values are passed in directly to super class)
     private void setUrlByDeviceId(){
-        if(this.mDeviceId.equalsIgnoreCase("BH")){
+        if(this.mDeviceId.equalsIgnoreCase(this.deviceID_BH)){
             super.setUrl(urlBH);
         }
         else if(this.mDeviceId.equalsIgnoreCase("LH")){
@@ -91,5 +94,7 @@ public class CreditExpense extends Expense {
         return expenseSummary;
 
     } //end getExpenseDetails
+
+
 
 }

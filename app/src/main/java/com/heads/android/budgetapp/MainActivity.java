@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox checkBudget;
     private CheckBox checkCredit;
 
+    private String deviceID_BH = "dc176faff8b524ce";
+    private String deviceID_LH = "test";
+
     /** TextView that is displayed when there is no internet connection*/
     private TextView mNoInternetTextView;
 
@@ -79,18 +85,18 @@ public class MainActivity extends AppCompatActivity {
     private String[] DAILY_LIVING_LIST = {"Clothes", "Food", "Clean", "Self", "Cats", "Hair", "Edu", "Misc"};
     private String[] PERSONAL_LIST = {"Presents for others", "Presents for ME!", "Idk...stuff"};
     private String[] HEALTH_LIST = {"Sports", "Doctor's visits", "Medication"};
-    private String[] CAR_LIST = {"Car insurance", "Registration", "Fuel", "Maintenance"};
+    private String[] CAR_LIST = {"Car Insurance", "Registration", "Fuel", "Maintenance"};
     private String[] HOUSE_LIST = {"Cell Phone", "Cable/Internet", "Electric", "Water/Sewage", "Supplies", "Improvements"};
 
     //global arrays of strings for credit expense types
-    private String[] CREDIT_LIST_LH = {"Joint to LH", "BH owes", "I owe BH", "LH to Joint"};
-    private String[] CREDIT_LIST_BH = {"Joint to BH", "LH owes", "Mom owes", "Tom owes", "I owe LH", "I owe Mom", "I owe Tom", "BH to Joint"};
+    private String[] CREDIT_LIST_LH = {"Joint to LH", "BH owes", "I owe BH", "I owe Joint"};
+    private String[] CREDIT_LIST_BH = {"Joint to BH", "LH owes", "Mom owes", "Tom owes", "I owe LH", "I owe Mom", "I owe Tom", "I owe Joint"};
 
     //global arrays of string for credit sub radios BH
     private String[] LHtoBH_BHLIST = {"Verizon", "BigPurchases", "Presents", "Baby Shox", "Vacation", "Misc", "Checks from LH"};
     private String[] MOMoBH_BHLIST = {"Verizon", "Presents", "Misc", "Checks from Mom"};
     private String[] TOMoBH_BHLIST = {"Verizon", "Presents", "Misc", "Checks from Tom"};
-    private String[] BHtoMOMTOM_BHLIST = {"Presents", "Dinners", "Misc"};
+    private String[] BHtoMOMTOM_BHLIST = {"Presents", "Dinners/Drinks", "Misc"};
 
     //global arrays of string for credit sub radios LH
 
@@ -105,8 +111,10 @@ public class MainActivity extends AppCompatActivity {
     private String tagNameSubExpense = "subExpenseType";
     private String tagNameSubCredit = "subCreditType";
 
+    private Context context = this;
+
     //this variable is for device ID to know if it's me or LH for creating credit section as well as entering correct data
-    private String deviceID = "BH";
+    private String deviceID;
 
     private final String budgetURLString =
             "https://docs.google.com/forms/d/e/1FAIpQLSdOoM753ZjdJDV050ss21z768qT8i3sHwp7T4iFRt8n4b8h_Q/formResponse";
@@ -149,7 +157,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
         //should i put the rest below into an else statement?
+        //get the device id
+        //deviceID = Settings.Secure.getString(context.getContentResolver(),
+            //    Settings.Secure.ANDROID_ID);
+        deviceID = this.deviceID_BH;
 
+        Log.i("device id" , deviceID);
+        //b0079d2a1285f603
+
+        //Toast.makeText(context, "android_id= " + android_id, Toast.LENGTH_LONG).show();
 
         //set the app to only be in portrait orientation (could add to manifest file)
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -169,6 +185,8 @@ public class MainActivity extends AppCompatActivity {
 
         //no longer need to instantiate radio button expense types for on click listeners
         //no longer need to instantiate $ buttons for on click listeners
+
+
 
         //instantiate submit button
         final Button submit = (Button) findViewById(R.id.buttonSubmit);
@@ -196,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Log.i("submit pressed: ", "yes");
+               // Log.i("month selected",monthSpinner.getSelectedItem().toString() );
                 //Log.i("isBudget value: " , String.valueOf(isBudget));
                 //if budget checked -> create budget object
 
@@ -220,6 +238,8 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         boolean submitBudget = false;
                         boolean submitCredit = false;
+                        Expense budgetEntry = null;
+                        Expense creditEntry = null;
                         //proceed to send data
                         //decide if making budget or credit or both expense type
                         if(isBudget){
@@ -227,24 +247,21 @@ public class MainActivity extends AppCompatActivity {
                             //String deviceId, String month, String amount, String category, String subCategory
                            // String test = monthSpinner.getSelectedItem().toString();
                           //  Log.i("submit : " , test);
-                            Expense budgetEntry = new BudgetExpense(monthSpinner.getSelectedItem().toString(), String.valueOf(expenseTotal), expenseType, subExpenseType);
+                           budgetEntry = new BudgetExpense(monthSpinner.getSelectedItem().toString(), String.valueOf(expenseTotal), expenseType, subExpenseType);
                             submitBudget = true;
                         }
                         if(isCredit){
                             Log.i("submit : " , "credit object");
                             //String deviceId, String month, String amount, String category, String subCategory
-                            Expense creditEntry = new CreditExpense(deviceID, monthSpinner.getSelectedItem().toString(), String.valueOf(expenseTotal),creditType, subCreditType);
+                            creditEntry = new CreditExpense(deviceID, monthSpinner.getSelectedItem().toString(), String.valueOf(expenseTotal),creditType, subCreditType);
                             submitCredit = true;
                         }
-
-
 
                         if(submitBudget && submitCredit){
                             Log.i("budget & credit: " , "both");
                             // task.execute(budgetEntry, creditEntry);
                             BudgetAsyncTask task = new BudgetAsyncTask();
-
-                            task.execute(budgetURLString);
+                            task.execute(budgetEntry, creditEntry);
                         }
                         else if(submitBudget){
                             Log.i("budget & credit: " , "budget");
@@ -253,14 +270,14 @@ public class MainActivity extends AppCompatActivity {
                             Log.i("about to create task" , "test");
                             BudgetAsyncTask task = new BudgetAsyncTask();
                             Log.i("created async task" , "test");
-                            task.execute(budgetURLString);
+                            task.execute(budgetEntry);
                         }
                         else if(submitCredit){
                             // task.execute(creditEntry);
                             Log.i("budget & credit: " , "credit");
                             BudgetAsyncTask task = new BudgetAsyncTask();
 
-                            task.execute(budgetURLString);
+                            task.execute(creditEntry);
                         }
                         else{
                             //error
@@ -358,8 +375,18 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     //update global budget boolean to true
                     isCredit = true;
+
+                    //get the device ID and determine which list to create
+                    if (deviceID.equalsIgnoreCase(deviceID_BH)){
                     creditTypeLayout.addView(createRadioGroup(CREDIT_LIST_BH, tagNameforCredit, creditTypeLayout));
-                }
+                    }
+
+                    else if (deviceID.equalsIgnoreCase(deviceID_LH)){
+                        creditTypeLayout.addView(createRadioGroup(CREDIT_LIST_LH, tagNameforCredit, creditTypeLayout));
+                    }
+
+                    }
+
             }
         });  //end on click listener for checkCredit checkbox
 
@@ -396,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
      * {@link AsyncTask} to perform the network request on a background thread
      */
     //private class BudgetAsyncTask extends AsyncTask<String, Void, String> {
-    private class BudgetAsyncTask extends AsyncTask<String, Void, Boolean> {
+    private class BudgetAsyncTask extends AsyncTask<Expense, Void, Boolean> {
         /**
          * This method is invoked on a background thread, so we can perform long-running
          * operations like making a network request.
@@ -404,21 +431,24 @@ public class MainActivity extends AppCompatActivity {
          * It is not okay to update the UI from a background thread, so we just return an
          * {@link String} object as the result.
          *
-         * @param urls
+         * @param expenses
          * @return
          */
         @Override
-        protected Boolean doInBackground(String... urls) {
-        //protected String doInBackground(String... urls) {
-
+        protected Boolean doInBackground(Expense... expenses) {
+            //protected String doInBackground(String... urls) {
+            Boolean result = null;
             //don't perform the request if there are no URLs, or the first URL is null
-            if (urls.length < 1 || urls[0] == null) {
+            if (expenses.length < 1 || expenses[0] == null) {
                 return null;
             }
-            Log.i("in do in background" , " - calling submit budget data");
+            Log.i("in do in background", " - calling submit budget data");
             // Perform the HTTP request for earthquake data and process the response.
             //String result = BudgetAppUtils.submitBudgetData(urls[0]);
-            Boolean result = BudgetAppUtils.submitBudgetData(urls[0]);
+            for (int i = 0; i < expenses.length; i++) {
+                result = BudgetAppUtils.submitBudgetData(expenses[i]);
+
+            }
             return result;
         }
 
@@ -562,8 +592,8 @@ public class MainActivity extends AppCompatActivity {
             case "I owe Tom":
                 creditTypeLayout.addView(createRadioGroup(BHtoMOMTOM_BHLIST, this.tagNameSubCredit, creditTypeLayout));
                 break;
-            case "BH to Joint":
-            case "LH to Joint":
+            case "I owe Joint":
+           // case "LH to Joint":
                 creditTypeLayout.addView(createRadioGroup(BHLHtoJOINT_LIST , this.tagNameSubCredit, creditTypeLayout));
                 break;
 

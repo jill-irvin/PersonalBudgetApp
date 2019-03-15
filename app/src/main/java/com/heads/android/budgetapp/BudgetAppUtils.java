@@ -121,9 +121,9 @@ public class BudgetAppUtils {
      * Send data to the budget sheet and return the result.
      */
     //public static String submitBudgetData(String requestUrl) {
-    public static Boolean submitBudgetData(String requestUrl) {
+    public static Boolean submitBudgetData(Expense expenseEntry) {
         // Create URL object
-        URL url = createUrl(requestUrl);
+       // URL url = createUrl(requestUrl);
       //  Log.i("in submit budget data", null);
 
 
@@ -133,15 +133,57 @@ public class BudgetAppUtils {
       // String response = null;
         try {
             //jsonResponse = makeHttpRequest(url);
-
-
+            Log.i("sending", "data");
+            FormBody body = null;
             OkHttpClient client = new OkHttpClient();
-            FormBody body = new FormBody.Builder()
-                    .add( "entry.709390653", "test" )
-                    .add( "entry.2064562737", "Option 1" )
-                    .build();
+            Log.i("expense entry" , expenseEntry.getExpenseType());
+
+            //if else for formbody based on if credit or budget
+            if(expenseEntry.getExpenseType().equalsIgnoreCase("Budget")){
+
+                String pageHistoryCode = "0," + expenseEntry.getSubPageHistoryCode();
+                //separate method to figure out which code to use based on whatever the category is (Entertainment, Daily Living, etc)
+
+                body = new FormBody.Builder()
+                        .add(expenseEntry.getEntrySubCategory(), expenseEntry.getSubCategory())
+                       // .add("pageHistory", "0,1")  //this can't be used for credit expense
+                        .add("pageHistory", pageHistoryCode)  //this can't be used for credit expense
+                        //does the page history change for when entertainment isn't the '1' page -
+                        //so the page history indicates the first page of the survey then the subsequent pages
+                        //so 2 = Daily Living
+
+                        //lets extract what type it is then update page history with a variable
+
+
+                        .add(expenseEntry.getEntryCost(), expenseEntry.getAmount())
+                        .add(expenseEntry.getEntryMonth(), expenseEntry.getMonth())
+                        .add(expenseEntry.getEntryCategory(), expenseEntry.getCategory())
+                        .build();
+            }
+            else if (expenseEntry.getExpenseType().equalsIgnoreCase("Credit")) {
+
+                body = new FormBody.Builder()
+                        .add(expenseEntry.getEntrySubCategory(), expenseEntry.getSubCategory())
+                        //.add("pageHistory", "0,1")  //this can't be used for credit expense
+                        //does the page history change for when entertainment isn't the '1' page
+                        .add(expenseEntry.getEntryCost(), expenseEntry.getAmount())
+                        .add(expenseEntry.getEntryMonth(), expenseEntry.getMonth())
+                        .add(expenseEntry.getEntryCategory(), expenseEntry.getCategory())
+                        .build();
+            }
+            else{
+                Log.i("sub data", "unknown expense");
+            }
+/*
+            Log.i("month", expenseEntry.getMonth());
+            Log.i("category", expenseEntry.getCategory());
+            Log.i("subcategory", expenseEntry.getSubCategory());
+            Log.i("subcategory entry", expenseEntry.getEntrySubCategory());
+            Log.i("cost", expenseEntry.getAmount());
+            */
+
             Request request = new Request.Builder()
-                    .url( url )
+                    .url(expenseEntry.getURL() )
                     .post( body )
                     .build();
           //  Response response = client.newCall( request ).execute();
@@ -167,6 +209,11 @@ public class BudgetAppUtils {
        // return response;
     } //end submitBudgetData
 
+
+    /*
+        gets the page history code for a budget expense
+
+     */
 
     /**
      * Returns new URL object from the given string URL.
