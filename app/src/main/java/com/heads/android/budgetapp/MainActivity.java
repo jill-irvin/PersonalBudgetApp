@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox checkCredit;
 
     private String deviceID_BH = "dc176faff8b524ce";
-    private String deviceID_LH = "test";
+    private String deviceID_LH = "f53d7f573806d277";
 
     /** TextView that is displayed when there is no internet connection*/
     private TextView mNoInternetTextView;
@@ -158,9 +158,9 @@ public class MainActivity extends AppCompatActivity {
 
         //should i put the rest below into an else statement?
         //get the device id
-        //deviceID = Settings.Secure.getString(context.getContentResolver(),
-            //    Settings.Secure.ANDROID_ID);
-        deviceID = this.deviceID_BH;
+        deviceID = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+      //  deviceID = this.deviceID_BH;
 
         Log.i("device id" , deviceID);
         //b0079d2a1285f603
