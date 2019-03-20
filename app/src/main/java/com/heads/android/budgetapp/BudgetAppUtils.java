@@ -51,7 +51,6 @@ public class BudgetAppUtils {
      */
     public static String checkExpenseSelections(int expenseTotal, boolean isBudget, boolean isCredit, String expenseType, String subExpenseType, String creditType, String subCreditType){
         String result = null;
-        Log.i("expense total is: ", String.valueOf(expenseTotal));
         //check protected variables from MainActivity as well as the passed in argument
         if(expenseTotal == 0)
             result = "Enter an amount.";
@@ -67,25 +66,6 @@ public class BudgetAppUtils {
                 result = "Enter all fields for Credit expense.";
             }
         }
-        //else if(expenseType == null)
-           // result = "You need to select an expense type";
-       // else if(subExpenseTypeSelected == 1)
-            //result =  "You need to select a sub expense";
-       // else{
-            /*
-            //check that subExpense has been selected
-            //get the second child of the dynamicRadioLayout = (LinearLayout) findViewById(R.id.radioGroupLayout);
-            Log.i("passed in: ", " int " + dynamicRadioLayout.getChildCount());
-            RadioGroup tempsubExpenseGroup = (RadioGroup) dynamicRadioLayout.getChildAt(1);
-
-            int subExpenseTypeSelected = tempsubExpenseGroup.getCheckedRadioButtonId();
-            Log.i("subChecked ", " int " + subExpenseTypeSelected);
-            if(subExpenseTypeSelected == -1) {
-                result = "You need to select a sub expense";
-            }
-
-            */
-      //  }
 
         return result;
     }
@@ -111,7 +91,6 @@ public class BudgetAppUtils {
     public static void removeRadioGroup(LinearLayout radioGroupLayout, int index){
         if(radioGroupLayout.getChildCount() >= index) {
             //remove the second view group at index 1 (view group at index 0 is hardcoded in xml file)
-            //  Log.i("deleted child:", "dynamic group");
             radioGroupLayout.removeViewAt(index);
             //dynamicRadioLayout.removeAllViews();
         }
@@ -124,8 +103,6 @@ public class BudgetAppUtils {
     public static Boolean submitBudgetData(Expense expenseEntry) {
         // Create URL object
        // URL url = createUrl(requestUrl);
-      //  Log.i("in submit budget data", null);
-
 
         // Perform HTTP request to the URL and receive a JSON response back
         //String jsonResponse = null;
@@ -133,10 +110,8 @@ public class BudgetAppUtils {
       // String response = null;
         try {
             //jsonResponse = makeHttpRequest(url);
-            Log.i("sending", "data");
             FormBody body = null;
             OkHttpClient client = new OkHttpClient();
-            Log.i("expense entry" , expenseEntry.getExpenseType());
 
             //if else for formbody based on if credit or budget
             if(expenseEntry.getExpenseType().equalsIgnoreCase("Budget")){
@@ -148,13 +123,7 @@ public class BudgetAppUtils {
                         .add(expenseEntry.getEntrySubCategory(), expenseEntry.getSubCategory())
                        // .add("pageHistory", "0,1")  //this can't be used for credit expense
                         .add("pageHistory", pageHistoryCode)  //this can't be used for credit expense
-                        //does the page history change for when entertainment isn't the '1' page -
-                        //so the page history indicates the first page of the survey then the subsequent pages
-                        //so 2 = Daily Living
-
                         //lets extract what type it is then update page history with a variable
-
-
                         .add(expenseEntry.getEntryCost(), expenseEntry.getAmount())
                         .add(expenseEntry.getEntryMonth(), expenseEntry.getMonth())
                         .add(expenseEntry.getEntryCategory(), expenseEntry.getCategory())
@@ -164,8 +133,6 @@ public class BudgetAppUtils {
 
                 body = new FormBody.Builder()
                         .add(expenseEntry.getEntrySubCategory(), expenseEntry.getSubCategory())
-                        //.add("pageHistory", "0,1")  //this can't be used for credit expense
-                        //does the page history change for when entertainment isn't the '1' page
                         .add(expenseEntry.getEntryCost(), expenseEntry.getAmount())
                         .add(expenseEntry.getEntryMonth(), expenseEntry.getMonth())
                         .add(expenseEntry.getEntryCategory(), expenseEntry.getCategory())
@@ -174,13 +141,6 @@ public class BudgetAppUtils {
             else{
                 Log.i("sub data", "unknown expense");
             }
-/*
-            Log.i("month", expenseEntry.getMonth());
-            Log.i("category", expenseEntry.getCategory());
-            Log.i("subcategory", expenseEntry.getSubCategory());
-            Log.i("subcategory entry", expenseEntry.getEntrySubCategory());
-            Log.i("cost", expenseEntry.getAmount());
-            */
 
             Request request = new Request.Builder()
                     .url(expenseEntry.getURL() )
@@ -189,7 +149,6 @@ public class BudgetAppUtils {
           //  Response response = client.newCall( request ).execute();
            // System.out.println( response.isSuccessful() );
 
-           // Log.i("successful send", null);
 
           //  String data = URLEncoder.encode("entry.709390653", "UTF-8")
             //  + "=" + URLEncoder.encode("120", "UTF-8");
@@ -253,18 +212,11 @@ public class BudgetAppUtils {
             urlConnection.setConnectTimeout(15000 /* milliseconds */);
             urlConnection.setRequestMethod("POST");
 
-            //loop thru entry and write each entry with associated value
-            //entry is matrix? first row - first element
-            //write one long line of data with entry and value?
-
             //can i make data an array of data?
 
             //switch statement to determine entry to update in budget sheet
             String data = URLEncoder.encode("entry.709390653", "UTF-8")
                   + "=" + URLEncoder.encode("120", "UTF-8");
-            //String data = URLEncoder.encode("entry.2064562737", "UTF-8")
-              //      + "=" + URLEncoder.encode("Option 1", "UTF-8");
-
 
             urlConnection.connect();
 

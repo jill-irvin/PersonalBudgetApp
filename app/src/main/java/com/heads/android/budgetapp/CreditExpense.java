@@ -24,27 +24,9 @@ public class CreditExpense extends Expense {
     //all the entry codes are the same for bh and lh forms.  only need to update the url
 
     //create hashmap of entries to the values sent in to constructor
-    //BH
-    //month entry  name="entry.1616244468"
-    //who owes who entry name="entry.820315610"
-    //subcategory entry name="entry.2119359282"
-    //cost entry name="entry.1143119101"
+
     String urlBH= "https://docs.google.com/forms/d/e/1FAIpQLScJGDnkJYIMDqVwV95LkhEZPdX159XRRvasG1mVzwj8uYwY1Q/formResponse";
-
-    //LH
-    //month entry  name="entry.1616244468"
-    //who owes who entry  name="entry.820315610"
-    //subcategory entry  name="entry.2119359282"
-    //cost entry  name="entry.1143119101"
     String urlLH = "https://docs.google.com/forms/d/e/1FAIpQLSdUFEBiyfViImy8uZuf1gqfs-UOcmiUt5U3QWDVg1OMH5_ofA/formResponse";
-
-    //budget ones for that class when created
-    //month  name="entry.104973546"
-    //category  name="entry.395008140.other_option_response"
-    //cost  name="entry.395008140"
-    //subcategory  name="entry.1250945459"
-
-    //url  https://docs.google.com/forms/d/e/1FAIpQLSdhsBfFRvUNjc6XyQYSmQEYa2wXAtmiuLUm0q8lpOvDvdSUEQ/formResponse
 
     private String[] entriesBH;
 

@@ -9,22 +9,13 @@ public class BudgetExpense extends Expense {
     //these are specific to budget form
     private String entryMonth = "entry.104973546";
     private String entryCategory = "entry.395008140";
+
     //private String entrySubCategory = "entry.1250945459";
     //private String entryCost = "entry.395008140";
     private String entrySubCategory;  // determine based on the string value of category selected
     private String entryCost ="entry.1250945459";
 
     private String subPageHistoryCode;
-
-    /*
-
-    ,[392486909,"Entertainment Expense",null,8,null,-3]
-,[1486340578,null,null,3,[[49061080,[["Dinners"]
-49061080
-247805869
-
-data-fieldid
-     */
 
     //these are the cells (entries) for where the subCategory is placed
     private String entryEntertainment = "entry.49061080";
@@ -97,19 +88,6 @@ data-fieldid
                 break;
         }
     }
-
-
-    //method to determine what to set the 'entrySubCategory' to in the super class
-    //private String getEntrySubCategory(String subCategory){
-     //   switch(subCategory){
-
-            //determine which case is used to set the subcategoryentry value
-          //  case "Dinners" "Drinks" " Pens/Outings" "Vacations "Misc
-
-
-       // }
-
-   // }
 
     //method to pull-together the expense into a string[]
     //potential use when diong call on expense object with httprequest method

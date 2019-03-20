@@ -119,9 +119,6 @@ public class MainActivity extends AppCompatActivity {
     private final String budgetURLString =
             "https://docs.google.com/forms/d/e/1FAIpQLSdOoM753ZjdJDV050ss21z768qT8i3sHwp7T4iFRt8n4b8h_Q/formResponse";
 
-    //https://docs.google.com/forms/d/17QUlqHXI7tf-9wxXWlLG6jxq3U_OvQ1UegYLzfexZBs/edit
-    //https://docs.google.com/forms/d/e/1FAIpQLSdOoM753ZjdJDV050ss21z768qT8i3sHwp7T4iFRt8n4b8h_Q/viewform
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
         // If there is a network connection, then proceed, else show toast and don't submit
        // if (networkInfo != null && networkInfo.isConnected()) {
         if (networkInfo == null || !(networkInfo.isConnected())) {
-            //Log.i("onCreate", "no internet connection");
 
                 // Update empty state with no connection error message
                 mNoInternetTextView.setText(R.string.no_internet_connection);
@@ -160,12 +156,6 @@ public class MainActivity extends AppCompatActivity {
         //get the device id
         deviceID = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-      //  deviceID = this.deviceID_BH;
-
-        Log.i("device id" , deviceID);
-        //b0079d2a1285f603
-
-        //Toast.makeText(context, "android_id= " + android_id, Toast.LENGTH_LONG).show();
 
         //set the app to only be in portrait orientation (could add to manifest file)
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -177,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         //this.groupExpenseTypes = (RadioGroup) findViewById(R.id.expenseTypeRadioGroup);
         //create the textview that shows the total amount
         this.totalView = (TextView) findViewById(R.id.textAmount);
-        Log.i("on create", " adding views");
+
         //dynamically creat the budget expense radio buttons on app start-up
         //add a radio group to the linear layout
 
@@ -185,8 +175,6 @@ public class MainActivity extends AppCompatActivity {
 
         //no longer need to instantiate radio button expense types for on click listeners
         //no longer need to instantiate $ buttons for on click listeners
-
-
 
         //instantiate submit button
         final Button submit = (Button) findViewById(R.id.buttonSubmit);
@@ -214,21 +202,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-               // Log.i("month selected",monthSpinner.getSelectedItem().toString() );
-                //Log.i("isBudget value: " , String.valueOf(isBudget));
-                //if budget checked -> create budget object
-
-                //if credit checked -> create credit object
-
-                //verify expense objects have no null fields
-                //if no, then submit, if yes, then toast of string result
-
-                //if budget is selected, then run checkExpenseSelections for budget
-                //if not null, then return string, else create budget object
-
                 //check the selections are good
                String checkSelectionsResult = BudgetAppUtils.checkExpenseSelections(expenseTotal, isBudget, isCredit, expenseType, subExpenseType, creditType, subCreditType);
-                //Log.i("checkSelection: ", checkSelectionsResult);
+
                 if (checkSelectionsResult != null) {
                    //update the toast message with returned string
                         Toast toast = Toast.makeText(getApplicationContext(),
@@ -243,88 +219,31 @@ public class MainActivity extends AppCompatActivity {
                         //proceed to send data
                         //decide if making budget or credit or both expense type
                         if(isBudget){
-                            Log.i("submit : " , "budget object");
-                            //String deviceId, String month, String amount, String category, String subCategory
-                           // String test = monthSpinner.getSelectedItem().toString();
-                          //  Log.i("submit : " , test);
                            budgetEntry = new BudgetExpense(monthSpinner.getSelectedItem().toString(), String.valueOf(expenseTotal), expenseType, subExpenseType);
                             submitBudget = true;
                         }
                         if(isCredit){
-                            Log.i("submit : " , "credit object");
-                            //String deviceId, String month, String amount, String category, String subCategory
                             creditEntry = new CreditExpense(deviceID, monthSpinner.getSelectedItem().toString(), String.valueOf(expenseTotal),creditType, subCreditType);
                             submitCredit = true;
                         }
 
                         if(submitBudget && submitCredit){
-                            Log.i("budget & credit: " , "both");
-                            // task.execute(budgetEntry, creditEntry);
                             BudgetAsyncTask task = new BudgetAsyncTask();
                             task.execute(budgetEntry, creditEntry);
                         }
                         else if(submitBudget){
-                            Log.i("budget & credit: " , "budget");
-                            // task.execute(budgetEntry);
-
-                            Log.i("about to create task" , "test");
                             BudgetAsyncTask task = new BudgetAsyncTask();
-                            Log.i("created async task" , "test");
                             task.execute(budgetEntry);
                         }
                         else if(submitCredit){
-                            // task.execute(creditEntry);
-                            Log.i("budget & credit: " , "credit");
                             BudgetAsyncTask task = new BudgetAsyncTask();
-
                             task.execute(creditEntry);
                         }
                         else{
                             //error
                             Log.i("budget & credit: " , "error");
-
                         }
-
-
-
-
-                        //execute for budget then another for credit? - or pass in 2 urls - one for budget one for credit?
-                        //var args should know what to do - but need to update to loop the number of args
-
-                      //  BudgetAsyncTask task = new BudgetAsyncTask();
-                        //now execute the async task
-
                     }  //end else to submit data
-
-                /*
-                //if budget is checked then get the expense, group expense, and subexpense
-                if(isBudget){
-                    //Log.i("value of expense type: " , expenseType);
-                    //Log.i("value of subexpense: " , subExpenseType);
-                    //check that radios are selected before allowing submission
-                    if(expenseType == null){
-                        //pop-up toast and highlight submit button
-                        Log.i("expense type: " , "null");
-                    }
-                    else if(subExpenseType == null){
-                        //pop-up toast and highlight submit button
-                        Log.i("subexpense type: " , "null");
-                    }
-                    else{
-                        //figure out which sub radio selected
-                        RadioGroup tempSelected = (RadioGroup) dynamicRadioLayout.getChildAt(1);
-                        int selected = tempSelected.getCheckedRadioButtonId();
-                        RadioButton tempRadioButton = (RadioButton) findViewById(selected);
-                        subExpenseType = tempRadioButton.getText().toString();
-
-                        Log.i("Main expense ", expenseType);
-                        Log.i("sub expense: ", subExpenseType);
-
-                        //post data to google sheets
-
-                    }
-                    */
-
             }
         });
 
@@ -384,7 +303,6 @@ public class MainActivity extends AppCompatActivity {
                     else if (deviceID.equalsIgnoreCase(deviceID_LH)){
                         creditTypeLayout.addView(createRadioGroup(CREDIT_LIST_LH, tagNameforCredit, creditTypeLayout));
                     }
-
                     }
 
             }
@@ -442,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
             if (expenses.length < 1 || expenses[0] == null) {
                 return null;
             }
-            Log.i("in do in background", " - calling submit budget data");
+
             // Perform the HTTP request for earthquake data and process the response.
             //String result = BudgetAppUtils.submitBudgetData(urls[0]);
             for (int i = 0; i < expenses.length; i++) {
@@ -542,8 +460,6 @@ public class MainActivity extends AppCompatActivity {
         //String radioSelectedText = tempView.getText().toString();
         String radioSelectedText = tempView.getTag().toString();
 
-        Log.i("add dyanmic radio: " , radioSelectedText);
-
         //update the global variable of expense with selection
         //expenseType = radioSelectedText;
 
@@ -619,46 +535,21 @@ public class MainActivity extends AppCompatActivity {
         //get the tagname of the radio group
         String tagNameGroup = tempGroup.getTag().toString();
 
-        Log.i("tagNameGroup is" , tagNameGroup);
-
         if(tagNameGroup.equalsIgnoreCase(this.tagNameforBudget)){
             this.expenseType = radioSelectedText;
-            Log.i("update global : " , radioSelectedText);
         }
         else if(tagNameGroup.equalsIgnoreCase(this.tagNameforCredit)){
             this.creditType = radioSelectedText;
-            Log.i("update global : " , radioSelectedText);
         }
         else if(tagNameGroup.equalsIgnoreCase(this.tagNameSubExpense)){
             this.subExpenseType = radioSelectedText;
-            Log.i("update global : " , radioSelectedText);
         }
         else if(tagNameGroup.equalsIgnoreCase(this.tagNameSubCredit)){
             this.subCreditType = radioSelectedText;
-            Log.i("update global : " , radioSelectedText);
         }
         else{
             Log.i("error updateGlobal: " , radioSelectedText);
         }
-/*
-        switch (tagNameGroup){
-            case "subExpenseType":
-                //update the global subexpenseType variable
-                this.subExpenseType = radioSelectedText;
-                break;
-            case "subCreditType":
-                this.subCreditType = radioSelectedText;
-                break;
-            case "budgetRadioGroup":
-                this.expenseType = radioSelectedText;
-                break;
-            case"creditRadioGroup":
-                this.creditType = radioSelectedText;
-                break;
-            default:
-                Log.i("error updateGlobal: " , radioSelectedText);
-        }
-        */
     }
 
 
@@ -668,7 +559,7 @@ public class MainActivity extends AppCompatActivity {
      * @param radiosToCreate - which String[] to use
      */
     public RadioGroup createRadioGroup(String[] radiosToCreate, String tagName, LinearLayout parentLayout) {
-        Log.i("Creating radio group" , tagName);
+
         //remove any sub radios from previous selections
         // BudgetAppUtils.removeRadioGroup(dynamicRadioLayout, 1);
         //remove only the subRadios by using 1 as the second parameter
@@ -681,13 +572,9 @@ public class MainActivity extends AppCompatActivity {
         //can't use string for id so you set tag then find by tag later with getTag
         tempRadioGroup.setTag(tagName);
 
-        Log.i("RadioGroup tag " , tempRadioGroup.getTag().toString());
-        //tempRadioGroup.setI
-
         //create some layout params for the group to match the first radio group in linear layout
         //RadioGroup.LayoutParams groupParams = new RadioGroup.LayoutParams(0, RadioGroup.LayoutParams.MATCH_PARENT);
         RadioGroup.LayoutParams groupParams = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
-
 
         //evenly space the radio group with the first group
         //groupParams.weight = 1;
@@ -757,30 +644,10 @@ public class MainActivity extends AppCompatActivity {
             TypedArray a = getTheme().obtainStyledAttributes(R.style.AppTheme, new int[] {android.R.attr.listChoiceIndicatorSingle});
             int attributeResourceId = a.getResourceId(0, 0);
             Drawable drawable = getResources().getDrawable(attributeResourceId, getApplicationContext().getTheme());
-            //Drawable drawable = getResources().getDrawable(attributeResourceId);
-            //TypedArray a = getTheme().obtainStyledAttributes(R.style.AppTheme, new int[] {android.R.attr.listChoiceIndicatorSingle});
-            //TypedArray a = getTheme().obtainStyledAttributes(R.style.AppTheme, new int[] {android.R.attr.radioButtonStyle});
 
-           // int attributeResourceId = a.getResourceId(0, 0);
-
-           // Drawable drawable = getResources().getDrawable(attributeResourceId, getApplicationContext().getTheme());
-            //drawable = ContextCompat.getDrawable(getCallingActivity(), R.drawable.)
-            //newButton.setCompoundDrawablesWithIntrinsicBounds(0,0,0, attributeResourceId);
             newButton.setCompoundDrawablesWithIntrinsicBounds(null,null,null, drawable);
 
-
-            // Resources.getDrawable(int, Theme)
-            ///Drawable drawable = Resources.getDr
-           // Resources.getSystem().getDrawable(0 , Resources.Theme AppTheme);
-                   // getResources().getDrawable(attributeResourceId);
-          //  newButton.setCompoundDrawablesWithIntrinsicBounds(null, null, null, drawable);
-
-           // newButton.setCompoundDrawablesWithIntrinsicBounds(0,0,0, Resources.getSystem().getDrawable(R.drawable.btn_radio)
-                   // R.drawable.btn);
-
             newButton.setGravity(Gravity.CENTER);
-
-            //newButton.setButtonDrawable(@);
 
             //use set tag to set the radio tag instead of id to search for later
             newButton.setTag(radiosToCreate[i]);
@@ -803,17 +670,10 @@ public class MainActivity extends AppCompatActivity {
      * @param parentLayout - the layout to remove radios from
      */
     private void removeSubRadioGroup(LinearLayout parentLayout) {
-    //    private void removeRadioGroup(int child) {
-        //parentLayout.removeViewAt(child);
-        //parentLayout.getChildAt(1).getT
-        //Log.i("remove sub " , String.valueOf(parentLayout.getId()));
-
             if (parentLayout.getChildCount() > 1) {
 
                 //parentLayout is the LinearLayout and we need the tagName of the child
                 String groupTagName = parentLayout.getChildAt(1).getTag().toString();
-
-                //Log.i("remove method", groupTagName);
 
                 if(groupTagName.equalsIgnoreCase(this.tagNameSubExpense)){
                     this.subExpenseType = null;
