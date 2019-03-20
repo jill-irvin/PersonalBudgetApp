@@ -8,7 +8,7 @@ public class CreditExpense extends Expense {
 
     private String mDeviceId;
     private String deviceID_BH = "dc176faff8b524ce";
-    private String deviceID_LH = "test";
+    private String deviceID_LH = "f53d7f573806d277";
 
     private String mCategory;  //who owes who
     private String mSubCategory;  //what type of expense does who owe
@@ -50,8 +50,8 @@ public class CreditExpense extends Expense {
 
     public CreditExpense(String deviceId, String month, String amount, String category, String subCategory){
         super(month, amount, category, subCategory, "Credit");
-        //this.mDeviceId = deviceId;
-        this.mDeviceId = deviceID_BH;
+        this.mDeviceId = deviceId;
+       // this.mDeviceId = deviceID_BH;
         //use this method to call super seturl with correct url
         this.setUrlByDeviceId();
 
@@ -73,7 +73,7 @@ public class CreditExpense extends Expense {
         if(this.mDeviceId.equalsIgnoreCase(this.deviceID_BH)){
             super.setUrl(urlBH);
         }
-        else if(this.mDeviceId.equalsIgnoreCase("LH")){
+        else if(this.mDeviceId.equalsIgnoreCase(this.deviceID_LH)){
             super.setUrl(urlLH);
         }
         else{
