@@ -69,8 +69,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-
-        android:background="@android:color/darker_gray"></View>
+        android:background="@color/actionbar_background">
+    </View>
 
     <!-- Cost -->
     <LinearLayout
@@ -83,7 +83,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="5dp"
-            android:text="Cost" />
+            android:textColor="@color/actionbar_background"
+            android:text="Cost"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -174,13 +176,16 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"></View>
+            android:background="@color/actionbar_background">
+
+        </View>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Budget"
             android:paddingBottom="5dp"
+            android:textColor="@color/actionbar_background"
             />
 
         <LinearLayout
@@ -269,13 +274,17 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"></View>
+            android:background="@color/actionbar_background">
+           <!-- android:background="@android:color/darker_gray" -->
+
+        </View>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="IOU"
+            android:text="Joint Expenses"
             android:paddingBottom="5dp"
+            android:textColor="@color/actionbar_background"
             />
         <LinearLayout
             android:id="@+id/creditTypeLayout"
@@ -292,7 +301,7 @@
         android:layout_gravity="center_horizontal"
         android:id="@+id/buttonSubmit"
         android:text="Submit"
-        android:background= "@color/moneyButtons"
+        android:background= "@color/actionbar_background"
         android:textColor="@android:color/white"
         />
 
