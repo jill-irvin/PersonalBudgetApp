@@ -100,6 +100,7 @@
                 android:layout_weight="1"
                 android:onClick="updateTotalDisplay"
                 android:text="$1"
+
 />
 
             <Button
@@ -290,7 +291,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:id="@+id/buttonSubmit"
-        android:text="Submit" />
+        android:text="Submit"
+        android:background= "@color/moneyButtons"
+        android:textColor="@android:color/white"
+        />
 
 
 </LinearLayout>

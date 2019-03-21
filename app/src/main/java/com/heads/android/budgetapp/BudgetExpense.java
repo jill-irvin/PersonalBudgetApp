@@ -1,5 +1,7 @@
 package com.heads.android.budgetapp;
 
+import android.util.Log;
+
 /**
  * Created by Jill on 2/23/2019.
  */

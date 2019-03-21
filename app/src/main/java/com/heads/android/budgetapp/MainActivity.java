@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
     //global arraylists of strings for expense type sub-types
     private String[] ENTERTAINMENT_LIST = {"Dinners", "Drinks", "Pens/Outings", "Vacations", "Misc"};
-    private String[] DAILY_LIVING_LIST = {"Clothes", "Food", "Clean", "Self", "Cats", "Hair", "Edu", "Misc"};
+    private String[] DAILY_LIVING_LIST = {"Clothes", "Food", "Clean", "Self", "Cats", "Hair", "Misc"};
     private String[] PERSONAL_LIST = {"Presents for others", "Presents for ME!", "Idk...stuff"};
     private String[] HEALTH_LIST = {"Sports", "Doctor's visits", "Medication"};
     private String[] CAR_LIST = {"Car Insurance", "Registration", "Fuel", "Maintenance"};
@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
     private String tagNameforCredit = "creditRadioGroup";
     private String tagNameSubExpense = "subExpenseType";
     private String tagNameSubCredit = "subCreditType";
+
+    private int currentMonth;
 
     private Context context = this;
 
@@ -194,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         monthSpinner = (Spinner) findViewById(R.id.month_spinner);
 
         //determine the current month and set the month spinner to it
-        int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+        currentMonth = Calendar.getInstance().get(Calendar.MONTH);
         monthSpinner.setSelection(currentMonth);
 
         //create onclick listener for submit button that takes in what's selected and sends update to database
@@ -400,6 +402,9 @@ public class MainActivity extends AppCompatActivity {
 
                 //clear UI
                 clearUI();
+
+                //update month spinner to current month
+                monthSpinner.setSelection(currentMonth);
             }
             // Update the information displayed to the user.
             //updateUi(earthquake);

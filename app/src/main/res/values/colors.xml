@@ -3,6 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="moneyButtons">#45f442</color>
+    <color name="moneyButtons">#6DA34D</color>
     <color name="cancelButton">#FF0000</color>
+    <color name="actionbar_background">#6DA34D</color>
+    <color name="actionbarabove_background">#383D3B</color>
+
 </resources>

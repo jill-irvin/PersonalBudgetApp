@@ -118,7 +118,6 @@ public class BudgetAppUtils {
 
                 String pageHistoryCode = "0," + expenseEntry.getSubPageHistoryCode();
                 //separate method to figure out which code to use based on whatever the category is (Entertainment, Daily Living, etc)
-
                 body = new FormBody.Builder()
                         .add(expenseEntry.getEntrySubCategory(), expenseEntry.getSubCategory())
                        // .add("pageHistory", "0,1")  //this can't be used for credit expense
