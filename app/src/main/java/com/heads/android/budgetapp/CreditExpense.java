@@ -1,5 +1,7 @@
 package com.heads.android.budgetapp;
 
+import android.util.Log;
+
 /**
  * Created by Jill on 1/18/2019.
  */
@@ -7,7 +9,10 @@ package com.heads.android.budgetapp;
 public class CreditExpense extends Expense {
 
     private String mDeviceId;
-    private String deviceID_BH = "dc176faff8b524ce";
+
+    //must update this field with new phone and update in MainActivity.java
+    //private String deviceID_BH = "dc176faff8b524ce";
+    private String deviceID_BH = "a3da609782d61c21";
     private String deviceID_LH = "f53d7f573806d277";
 
     private String mCategory;  //who owes who
@@ -32,10 +37,13 @@ public class CreditExpense extends Expense {
 
     public CreditExpense(String deviceId, String month, String amount, String category, String subCategory){
         super(month, amount, category, subCategory, "Credit");
+        //Log.i("credit expense", "constructor");
         this.mDeviceId = deviceId;
        // this.mDeviceId = deviceID_BH;
         //use this method to call super seturl with correct url
         this.setUrlByDeviceId();
+
+       // Log.i("credit expense", "set url by device id called");
 
         //set all the super's entry fields as well
         super.setEntryMonth(this.entryMonth);
@@ -52,7 +60,10 @@ public class CreditExpense extends Expense {
     //this method is used to determine which phone made entry request - and populates the
     //expense object with the correct entry names (values are passed in directly to super class)
     private void setUrlByDeviceId(){
+        //Log.i("inseturl", "by device id");
+       // Log.i("device id", this.mDeviceId);
         if(this.mDeviceId.equalsIgnoreCase(this.deviceID_BH)){
+
             super.setUrl(urlBH);
         }
         else if(this.mDeviceId.equalsIgnoreCase(this.deviceID_LH)){

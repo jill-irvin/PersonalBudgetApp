@@ -71,7 +71,11 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox checkBudget;
     private CheckBox checkCredit;
 
-    private String deviceID_BH = "dc176faff8b524ce";
+    //must update this field with new phone and be updated in the CreditExpense.java
+    //private String deviceID_BH = "dc176faff8b524ce";
+    //private String deviceID_BH = "93eeeb8bf32c5052";
+    private String deviceID_BH = "a3da609782d61c21";
+
     private String deviceID_LH = "f53d7f573806d277";
 
     /** TextView that is displayed when there is no internet connection*/
@@ -280,7 +284,8 @@ public class MainActivity extends AppCompatActivity {
         checkCredit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Log.i("in checkbuget", "check ");
+                //Log.i("device id ", deviceID);
                 //get the current condition of the checkbox
                 if (!checkCredit.isChecked()) {
                     //set global of budget boolean to false

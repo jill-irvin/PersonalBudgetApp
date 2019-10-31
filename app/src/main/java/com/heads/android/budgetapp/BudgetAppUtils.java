@@ -140,6 +140,8 @@ public class BudgetAppUtils {
             else{
                 Log.i("sub data", "unknown expense");
             }
+            Log.i("buget app utils", "about to create request");
+            Log.i("buget app utils", "request url" + expenseEntry.getURL());
 
             Request request = new Request.Builder()
                     .url(expenseEntry.getURL() )
