@@ -27,7 +27,8 @@ public class BudgetExpense extends Expense {
     private String entryHealth = "entry.1401133933";
     private String entryHouse = "entry.1991632538";
 
-    String urlBudget= "https://docs.google.com/forms/d/e/1FAIpQLSdhsBfFRvUNjc6XyQYSmQEYa2wXAtmiuLUm0q8lpOvDvdSUEQ/formResponse";
+    //plug in url for data storage (google form?)
+    String urlBudget= "";
 
     public BudgetExpense(String month, String amount, String category, String subCategory) {
         super(month, amount, category, subCategory, "Budget");

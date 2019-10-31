@@ -72,11 +72,9 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox checkCredit;
 
     //must update this field with new phone and be updated in the CreditExpense.java
-    //private String deviceID_BH = "dc176faff8b524ce";
-    //private String deviceID_BH = "93eeeb8bf32c5052";
-    private String deviceID_BH = "a3da609782d61c21";
-
-    private String deviceID_LH = "f53d7f573806d277";
+    //ues log statement with device plugged-in for debugging and print device id
+    private String deviceID_BH = "";
+    private String deviceID_LH = "";
 
     /** TextView that is displayed when there is no internet connection*/
     private TextView mNoInternetTextView;
@@ -122,8 +120,7 @@ public class MainActivity extends AppCompatActivity {
     //this variable is for device ID to know if it's me or LH for creating credit section as well as entering correct data
     private String deviceID;
 
-    private final String budgetURLString =
-            "https://docs.google.com/forms/d/e/1FAIpQLSdOoM753ZjdJDV050ss21z768qT8i3sHwp7T4iFRt8n4b8h_Q/formResponse";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

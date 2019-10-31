@@ -11,9 +11,9 @@ public class CreditExpense extends Expense {
     private String mDeviceId;
 
     //must update this field with new phone and update in MainActivity.java
-    //private String deviceID_BH = "dc176faff8b524ce";
-    private String deviceID_BH = "a3da609782d61c21";
-    private String deviceID_LH = "f53d7f573806d277";
+    //same device IDs from MainActivity
+    private String deviceID_BH = "";
+    private String deviceID_LH = "";
 
     private String mCategory;  //who owes who
     private String mSubCategory;  //what type of expense does who owe
@@ -29,9 +29,9 @@ public class CreditExpense extends Expense {
     //all the entry codes are the same for bh and lh forms.  only need to update the url
 
     //create hashmap of entries to the values sent in to constructor
-
-    String urlBH= "https://docs.google.com/forms/d/e/1FAIpQLScJGDnkJYIMDqVwV95LkhEZPdX159XRRvasG1mVzwj8uYwY1Q/formResponse";
-    String urlLH = "https://docs.google.com/forms/d/e/1FAIpQLSdUFEBiyfViImy8uZuf1gqfs-UOcmiUt5U3QWDVg1OMH5_ofA/formResponse";
+    //plug in url for data storage (google form?)
+    String urlBH= "";
+    String urlLH = "";
 
     private String[] entriesBH;
 
